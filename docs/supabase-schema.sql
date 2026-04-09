@@ -28,6 +28,7 @@ create table if not exists sales_leads (
 -- 사장님 모집 페이지 확장 필드 (이미 있으면 무시)
 alter table sales_leads add column if not exists store_name text;
 alter table sales_leads add column if not exists address text;
+alter table sales_leads add column if not exists sales_owner text;
 alter table sales_leads add column if not exists contract_term text;
 alter table sales_leads add column if not exists main_menu text;
 alter table sales_leads add column if not exists extra_menus jsonb;

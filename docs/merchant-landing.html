@@ -695,6 +695,10 @@
               <input id="address" type="text" placeholder="도로명 주소" />
             </div>
             <div class="field">
+              <label for="sales_owner">담당 영업자 또는 코드</label>
+              <input id="sales_owner" type="text" placeholder="예: 홍길동 / 서울동부팀 / 파트너 코드" />
+            </div>
+            <div class="field">
               <label>계약 기간 *</label>
               <div class="choice-grid">
                 <label class="choice-option">
@@ -882,6 +886,10 @@
         return value;
       }
 
+      function getSalesOwner() {
+        return document.getElementById('sales_owner')?.value.trim() || '직접 유입';
+      }
+
       function getExtraMenus() {
         return Array.from(document.querySelectorAll('.extra-menu-input'))
           .map((input) => input.value.trim())
@@ -1064,6 +1072,7 @@
         return [
           `[한끼비서 사장님 가입 계약 안내]`,
           `매장명: ${formData.store_name}`,
+          `담당 영업자: ${formData.sales_owner}`,
           `대표 메뉴: ${formData.main_menu}`,
           `총 메뉴 수: ${pricing.menuCount}개`,
           `월 요금: ${formatWon(pricing.monthlyPrice)}`,
@@ -1100,6 +1109,7 @@
           memo: legacyMemo,
           store_name: payload.store_name,
           address: payload.address,
+          sales_owner: payload.sales_owner,
           contract_term: payload.contract_term,
           main_menu: payload.main_menu,
           extra_menus: payload.extra_menus,
@@ -1155,6 +1165,7 @@
           owner_name: document.getElementById('owner_name').value.trim(),
           phone: formatPhoneDisplay(document.getElementById('phone').value.trim()),
           address: document.getElementById('address').value.trim(),
+          sales_owner: getSalesOwner(),
           contract_term: getContractTerm(),
           main_menu: document.getElementById('main_menu').value.trim(),
           extra_menus: getExtraMenus(),
@@ -1169,6 +1180,7 @@
         const memoPayload = {
           storeName: formData.store_name,
           address: formData.address,
+          salesOwner: formData.sales_owner,
           contractTerm: formData.contract_term,
           mainMenu: formData.main_menu,
           extraMenus: formData.extra_menus,
@@ -1192,6 +1204,7 @@
             source: 'merchant_slides_v1',
             store_name: formData.store_name,
             address: formData.address,
+            sales_owner: formData.sales_owner,
             contract_term: formData.contract_term,
             main_menu: formData.main_menu,
             extra_menus: formData.extra_menus,
@@ -1241,6 +1254,16 @@
         goToSlide(9);
       }
 
+      function initSalesOwnerPrefill() {
+        const params = new URLSearchParams(window.location.search);
+        const prefill = params.get('sales_owner') || params.get('sales') || params.get('partner') || '';
+        if (!prefill) return;
+        const salesOwnerInput = document.getElementById('sales_owner');
+        if (salesOwnerInput && !salesOwnerInput.value.trim()) {
+          salesOwnerInput.value = prefill;
+        }
+      }
+
       updateProgress();
       document.getElementById('main_menu')?.addEventListener('input', updatePricingUI);
       document.querySelectorAll('input[name="contract_term"]').forEach((input) => {
@@ -1250,6 +1273,7 @@
         input.addEventListener('input', updatePricingUI);
       });
       updatePricingUI();
+      initSalesOwnerPrefill();
       initContractViewMode();
     </script>
   </body>
