@@ -50,19 +50,6 @@
         margin-bottom: 18px;
       }
 
-      .brand {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .eyebrow {
-        font-size: 11px;
-        letter-spacing: 0.16em;
-        font-weight: 800;
-        color: var(--primary);
-      }
-
       .brand-title {
         font-size: 17px;
         font-weight: 800;
@@ -99,19 +86,6 @@
       .hero-card {
         text-align: center;
         padding-top: 32px;
-      }
-
-      .slide-label {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 7px 12px;
-        border-radius: 999px;
-        background: rgba(246, 165, 72, 0.14);
-        color: var(--primary-deep);
-        font-size: 12px;
-        font-weight: 800;
-        margin-bottom: 16px;
       }
 
       h1,
@@ -175,12 +149,6 @@
         border: 1px solid var(--line);
         border-radius: 26px;
         padding: 16px;
-      }
-
-      .shot-caption {
-        font-size: 12px;
-        color: var(--muted);
-        margin-bottom: 10px;
       }
 
       .shot-frame {
@@ -507,20 +475,15 @@
   <body>
     <main class="wrap">
       <div class="topbar">
-        <div class="brand">
-          <span class="eyebrow">HAN-GGI PARTNER</span>
-          <span class="brand-title">파트너 가입 안내</span>
-        </div>
+        <div class="brand-title">파트너 가입 안내</div>
         <div class="progress-pill" id="progress-pill">1 / 10</div>
       </div>
 
       <section class="slide active" data-slide="1">
         <div class="card hero-card">
-          <span class="slide-label">한끼비서 소개</span>
           <h1>사장님 매장이 고객의<br />"오늘 뭐 먹지?" 순간에 들어갑니다.</h1>
           <p class="lead">한끼비서는 고객이 메뉴를 정하는 순간을 줄여주고, 외식이 필요할 때 가까운 매장으로 자연스럽게 이어주는 앱이에요.</p>
           <div class="shot-shell">
-            <div class="shot-caption">앱 첫인상 화면</div>
             <div class="shot-frame">
               <img src="merchant-assets/shot-01-intro.png" alt="한끼비서 온보딩 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
               <div class="shot-placeholder">이 자리에 앱 첫 화면 스크린샷을 넣으면 됩니다.<br />사용자가 한끼비서를 처음 보는 장면을 보여주세요.</div>
@@ -534,11 +497,9 @@
 
       <section class="slide" data-slide="2">
         <div class="card">
-          <span class="slide-label">추천 흐름</span>
           <h2>고객은 지금 먹기 좋은 메뉴를 빠르게 추천받아요.</h2>
           <p class="lead">날씨와 시간대, 최근 식사 흐름을 바탕으로 메뉴를 보여주기 때문에 메뉴를 찾는 순간에 사장님 매장이 들어갈 기회가 생깁니다.</p>
           <div class="shot-shell">
-            <div class="shot-caption">홈 추천 화면</div>
             <div class="shot-frame">
               <img src="merchant-assets/shot-02-home.png" alt="한끼비서 추천 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
               <div class="shot-placeholder">추천 화면 스크린샷을 여기에 교체해 넣어주세요.</div>
@@ -553,11 +514,9 @@
 
       <section class="slide" data-slide="3">
         <div class="card">
-          <span class="slide-label">외식 전환</span>
           <h2>밖에서 먹을래요를 누르는 순간, 근처 매장 추천으로 이어집니다.</h2>
           <p class="lead">메뉴를 고른 고객이 바로 근처 매장을 찾는 흐름이라, 식사 의사가 높은 손님에게 연결될 수 있어요.</p>
           <div class="shot-shell">
-            <div class="shot-caption">집/밖 선택 화면</div>
             <div class="shot-frame">
               <img src="merchant-assets/shot-03-choice.png" alt="집에서 준비할래요 밖에서 먹을래요 선택 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
               <div class="shot-placeholder">집/밖 선택 화면 스크린샷을 여기에 넣어주세요.</div>
@@ -572,11 +531,9 @@
 
       <section class="slide" data-slide="4">
         <div class="card">
-          <span class="slide-label">위치 기반 노출</span>
           <h2>고객 위치 기준 가까운 매장을 먼저 보여줘요.</h2>
           <p class="lead">고객이 실제로 있는 위치를 기준으로 가까운 매장을 우선 찾아주기 때문에, 근처에서 바로 유입될 가능성이 높아집니다.</p>
           <div class="shot-shell">
-            <div class="shot-caption">외식 추천 기준 위치</div>
             <div class="shot-frame">
               <img src="merchant-assets/shot-04-location.png" alt="외식 추천 기준 위치 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
               <div class="shot-placeholder">위치 기준 추천 또는 위치 설정 화면을 여기에 넣어주세요.</div>
@@ -591,7 +548,6 @@
 
       <section class="slide" data-slide="5">
         <div class="card">
-          <span class="slide-label">사장님 입장 핵심</span>
           <h2>메뉴를 찾는 순간 노출되고, 근처 고객에게 먼저 보여집니다.</h2>
           <div class="point-list">
             <div class="point-item">
@@ -616,7 +572,6 @@
 
       <section class="slide" data-slide="6">
         <div class="card">
-          <span class="slide-label">요금 안내</span>
           <h2>초기 프로모션가로 먼저 부담 없이 시작해보세요.</h2>
           <div class="price-card">
             <div class="price-box">
@@ -641,7 +596,6 @@
 
       <section class="slide" data-slide="7">
         <div class="card">
-          <span class="slide-label">기본 정보 입력</span>
           <h2>먼저 매장 기본 정보를 알려주세요.</h2>
           <div class="field-grid">
             <div class="field">
@@ -671,7 +625,6 @@
 
       <section class="slide" data-slide="8">
         <div class="card">
-          <span class="slide-label">메뉴 정보 입력</span>
           <h2>대표 메뉴와 추가 메뉴를 알려주세요.</h2>
           <div class="field-grid">
             <div class="field">
@@ -699,7 +652,6 @@
 
       <section class="slide" data-slide="9" id="contract-view">
         <div class="card">
-          <span class="slide-label">계약서 확인</span>
           <h2>계약 내용을 확인해주세요.</h2>
           <p class="lead">실제 제출 전에 아래 내용을 확인하신 뒤 동의 여부를 선택하게 됩니다.</p>
           <div class="contract-box" id="contract-text">
@@ -722,7 +674,6 @@
 
       <section class="slide" data-slide="10">
         <div class="card">
-          <span class="slide-label">동의 및 제출</span>
           <h2>마지막으로 동의 후 전송해주세요.</h2>
           <div class="check-list">
             <label class="check-item">
@@ -731,11 +682,11 @@
             </label>
             <label class="check-item">
               <input id="agree_sms" type="checkbox" />
-              <span>입력한 번호로 계약 확인 문자를 받는 데 동의합니다.</span>
+              <span>입력한 번호로 계약 내용을 문자 앱으로 보내는 데 동의합니다.</span>
             </label>
           </div>
           <div class="notice">
-            입력한 정보는 파트너 검토와 연락, 계약 확인 안내에만 사용됩니다. 문자 발송이 지연되더라도 신청 정보는 정상 접수됩니다.
+            입력한 정보는 파트너 검토와 연락, 계약 확인 안내에만 사용됩니다. 저장이 끝나면 문자 앱으로 계약 내용이 연결됩니다.
           </div>
           <div id="error-submit" class="error-msg"></div>
           <div class="nav">
@@ -758,7 +709,6 @@
       const SUPABASE_URL = 'https://bfdesyathuzrbagemhoe.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmZGVzeWF0aHV6cmJhZ2VtaG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDQ4MDEsImV4cCI6MjA5MTIyMDgwMX0.DUY-bvmCT-jRwLlRO2aCXeV3uDjG7-bCiCHRCfUmd3Q';
       const CONTRACT_VERSION = '2026-04-09-v1';
-      const SMS_ENDPOINT = '/.netlify/functions/send-merchant-contract';
       const TOTAL_SLIDES = 10;
 
       const { createClient } = supabase;
@@ -883,31 +833,16 @@
         return document.getElementById('contract-text').innerText.trim();
       }
 
-      async function sendContractSms(phone, message) {
-        try {
-          const response = await fetch(SMS_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone, message, contractVersion: CONTRACT_VERSION }),
-          });
+      function buildSmsUrl(phone, message) {
+        const digits = sanitizePhone(phone);
+        const encodedMessage = encodeURIComponent(message);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const separator = isIOS ? '&' : '?';
+        return `sms:${digits}${separator}body=${encodedMessage}`;
+      }
 
-          if (!response.ok) {
-            return {
-              status: 'failed',
-              detail: `http_${response.status}`,
-            };
-          }
-
-          return {
-            status: 'sent',
-            detail: null,
-          };
-        } catch (error) {
-          return {
-            status: 'failed',
-            detail: error instanceof Error ? error.message : 'sms_request_failed',
-          };
-        }
+      function openSmsComposer(phone, message) {
+        window.location.href = buildSmsUrl(phone, message);
       }
 
       async function insertSalesLead(payload, legacyMemo) {
@@ -974,7 +909,6 @@
         const contractSnapshot = getContractSnapshot();
         const contractSummary = buildContractSummary(formData);
         const agreedAt = new Date().toISOString();
-        const smsResult = await sendContractSms(formData.phone, contractSummary);
 
         const memoPayload = {
           storeName: formData.store_name,
@@ -985,8 +919,8 @@
           contractAgreed: true,
           agreedAt,
           contractTextSnapshot: contractSnapshot,
-          smsDeliveryStatus: smsResult.status,
-          smsDeliveryDetail: smsResult.detail,
+          smsMode: 'sms_app_handoff',
+          smsDeliveryStatus: 'ready_for_sms_handoff',
         };
 
         const { error } = await insertSalesLead(
@@ -1001,8 +935,8 @@
             agreed_to_contract: true,
             contract_version: CONTRACT_VERSION,
             agreed_at: agreedAt,
-            sms_delivery_status: smsResult.status,
-            sms_sent_at: smsResult.status === 'sent' ? agreedAt : null,
+            sms_delivery_status: 'ready_for_sms_handoff',
+            sms_sent_at: null,
           },
           JSON.stringify(memoPayload)
         );
@@ -1021,10 +955,10 @@
         document.getElementById('success-view').style.display = 'flex';
 
         const successMessage = document.getElementById('success-message');
-        successMessage.innerHTML =
-          smsResult.status === 'sent'
-            ? '입력하신 번호로 계약 내용을 보내드렸어요.<br />담당자가 확인 후 빠르게 연락드립니다.'
-            : '신청 정보는 정상 접수됐어요.<br />계약 문자 발송은 확인 후 따로 안내드릴게요.';
+        successMessage.innerHTML = '신청 정보는 정상 접수됐어요.<br />문자 앱이 열리면 계약 내용을 확인하고 전송해주세요.';
+        setTimeout(() => {
+          openSmsComposer(formData.phone, contractSummary);
+        }, 150);
       }
 
       function initContractViewMode() {
