@@ -1,98 +1,164 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Purchases from 'react-native-purchases';
 import { useAppStore } from './src/store';
 import OnboardingScreen from './src/components/OnboardingScreen';
 import HomeScreen from './src/components/HomeScreen';
-import LogScreen from './src/components/LogScreen';
 import CalendarScreen from './src/components/CalendarScreen';
 import SettingsScreen from './src/components/SettingsScreen';
 import PaywallScreen from './src/components/PaywallScreen';
-
-// RevenueCat API 키 — RevenueCat 대시보드에서 발급 후 입력
-const REVENUECAT_IOS_KEY = 'appl_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
-const REVENUECAT_ANDROID_KEY = 'goog_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+import { configurePurchasesSafely, getCustomerInfoSafely } from './src/services/purchases';
+import {
+  getNotificationPermissionStatus,
+  syncMealReminders,
+} from './src/services/notifications';
+import { theme } from './src/theme';
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const { loadFromStorage, initTrialIfNeeded, hasAccess, setPurchased } = useAppStore();
+  const {
+    loadFromStorage,
+    initTrialIfNeeded,
+    hasAccess,
+    setPurchased,
+    setNotificationPermissionStatus,
+  } = useAppStore();
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
   const [accessGranted, setAccessGranted] = useState<boolean | null>(null);
 
   useEffect(() => {
     const init = async () => {
-      // RevenueCat 초기화
-      const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
-      Purchases.configure({ apiKey });
+      let onboarded = false;
+      let access = false;
 
-      // 스토리지 로드
-      await loadFromStorage();
-
-      // 트라이얼 시작일 기록 (최초 실행 시)
-      initTrialIfNeeded();
-
-      // RevenueCat에서 구매 상태 확인
       try {
-        const customerInfo = await Purchases.getCustomerInfo();
-        const purchased = Object.keys(customerInfo.entitlements.active).length > 0;
+        await configurePurchasesSafely();
+
+        // 스토리지 로드
+        await loadFromStorage();
+
+        const notificationPermission = await getNotificationPermissionStatus();
+        setNotificationPermissionStatus(notificationPermission);
+
+        if (notificationPermission === 'granted') {
+          await syncMealReminders(useAppStore.getState().notificationPreferences);
+        }
+
+        // 트라이얼 시작일 기록 (최초 실행 시)
+        initTrialIfNeeded();
+
+        // RevenueCat에서 구매 상태 확인
+        const customerInfo = await getCustomerInfoSafely();
+        const purchased = customerInfo
+          ? Object.keys(customerInfo.entitlements.active).length > 0
+          : false;
         if (purchased) setPurchased(true);
-      } catch {
-        // 네트워크 오류 등 — 로컬 상태 그대로 사용
+      } catch (error) {
+        console.error('App init failed:', error);
+      } finally {
+        try {
+          const onboardedStr = await AsyncStorage.getItem('is-onboarded');
+          onboarded = onboardedStr === 'true';
+        } catch (storageError) {
+          console.error('Failed to read onboarding state:', storageError);
+        }
+
+        try {
+          access = useAppStore.getState().hasAccess();
+        } catch (storeError) {
+          console.error('Failed to resolve access state:', storeError);
+          access = hasAccess();
+        }
+
+        setIsOnboarded(onboarded);
+        setAccessGranted(access);
       }
-
-      // 온보딩 체크
-      const onboardedStr = await AsyncStorage.getItem('is-onboarded');
-      setIsOnboarded(onboardedStr === 'true');
-
-      // 접근 권한 체크 (store가 업데이트된 후)
-      setAccessGranted(useAppStore.getState().hasAccess());
     };
     init();
-  }, []);
+  }, [hasAccess, initTrialIfNeeded, loadFromStorage, setNotificationPermissionStatus, setPurchased]);
 
   if (isOnboarded === null || accessGranted === null) {
-    return <View style={styles.container} />;
+    return (
+      <GestureHandlerRootView style={styles.container}>
+        <View style={styles.loadingScreen}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={styles.loadingTitle}>한끼비서 준비 중</Text>
+          <Text style={styles.loadingText}>초기 설정을 확인하고 있어요.</Text>
+        </View>
+      </GestureHandlerRootView>
+    );
   }
 
   if (!isOnboarded) {
     return (
-      <OnboardingScreen
-        onComplete={() => {
-          setIsOnboarded(true);
-          setAccessGranted(useAppStore.getState().hasAccess());
-        }}
-      />
+      <GestureHandlerRootView style={styles.container}>
+        <OnboardingScreen
+          onComplete={() => {
+            setIsOnboarded(true);
+            setAccessGranted(useAppStore.getState().hasAccess());
+          }}
+        />
+      </GestureHandlerRootView>
     );
   }
 
   if (!accessGranted) {
     return (
-      <PaywallScreen onPurchased={() => setAccessGranted(true)} />
+      <GestureHandlerRootView style={styles.container}>
+        <PaywallScreen onPurchased={() => setAccessGranted(true)} />
+      </GestureHandlerRootView>
     );
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: '한끼비서' }} />
-        <Stack.Screen name="Log" component={LogScreen} options={{ title: '먹었던 음식' }} />
-        <Stack.Screen name="Calendar" component={CalendarScreen} options={{ title: '먹었던 달력' }} />
-        <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: '설정' }} />
-      </Stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
+    <GestureHandlerRootView style={styles.container}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          detachInactiveScreens={false}
+          screenOptions={{
+            animation: 'none',
+            cardShadowEnabled: false,
+            gestureEnabled: false,
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} options={{ title: '한끼비서' }} />
+          <Stack.Screen name="Calendar" component={CalendarScreen} options={{ title: '달력' }} />
+          <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: '설정' }} />
+        </Stack.Navigator>
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.white,
+  },
+  loadingScreen: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    paddingHorizontal: 24,
+    backgroundColor: theme.colors.surface,
+  },
+  loadingTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  loadingText: {
+    fontSize: 14,
+    color: theme.colors.muted,
+    textAlign: 'center',
   },
 });

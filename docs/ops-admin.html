@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>한끼비서 운영 어드민</title>
+    <style>
+      :root {
+        --primary: #4a8f32;
+        --deep: #163832;
+        --surface: #f2f6ea;
+        --white: #ffffff;
+        --line: #d7e2cf;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+        background: #eef4e7;
+        color: var(--deep);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: 100vh;
+      }
+      aside {
+        background: var(--deep);
+        color: var(--white);
+        padding: 24px;
+      }
+      aside h1 { font-size: 22px; margin: 0 0 20px; }
+      aside nav a {
+        display: block;
+        color: rgba(255,255,255,0.85);
+        text-decoration: none;
+        margin-bottom: 12px;
+      }
+      main { padding: 24px; }
+      .row {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        margin-bottom: 16px;
+      }
+      .card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 18px;
+        box-shadow: 0 12px 30px rgba(22, 56, 50, 0.07);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--white);
+        border-radius: 24px;
+        overflow: hidden;
+      }
+      th, td {
+        padding: 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+      }
+      th { background: #f7faf2; }
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--surface);
+        font-size: 12px;
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside>
+        <h1>한끼비서 OPS</h1>
+        <nav>
+          <a href="#">영업 리드</a>
+          <a href="#">사장님 계정</a>
+          <a href="#">매장 승인</a>
+          <a href="#">입금 확인</a>
+          <a href="#">추천 슬롯</a>
+        </nav>
+      </aside>
+      <main>
+        <div class="row">
+          <section class="card"><strong>오늘 신규 리드</strong><p>12건</p></section>
+          <section class="card"><strong>입금 대기</strong><p>5건</p></section>
+          <section class="card"><strong>활성 매장</strong><p>18곳</p></section>
+        </div>
+
+        <section class="card" style="margin-bottom:16px;">
+          <h2>운영 흐름</h2>
+          <p>QR 유입 -> 계약 확인 -> 계좌이체 -> 입금 확인 -> 매장 활성화 -> 소비자 추천 반영</p>
+        </section>
+
+        <table>
+          <thead>
+            <tr>
+              <th>매장</th>
+              <th>상태</th>
+              <th>메뉴</th>
+              <th>입금</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>그린테이블 키친</td>
+              <td><span class="badge">store_live</span></td>
+              <td>샐러드, 비빔밥</td>
+              <td>확인 완료</td>
+            </tr>
+            <tr>
+              <td>브로스랩</td>
+              <td><span class="badge">store_live</span></td>
+              <td>순두부찌개, 국밥</td>
+              <td>확인 완료</td>
+            </tr>
+            <tr>
+              <td>프로틴하우스</td>
+              <td><span class="badge">payment_verified</span></td>
+              <td>불고기, 삼계탕</td>
+              <td>활성화 대기</td>
+            </tr>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </body>
+</html>

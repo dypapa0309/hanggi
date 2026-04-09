@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useAppStore } from '../store';
+import { theme } from '../theme';
 
 interface SwapScreenProps {
   onSelectIntent: (intent: 'light' | 'heavy' | 'cheap' | 'no_soup' | 'random') => void;
@@ -34,24 +34,29 @@ export default function SwapScreen({ onSelectIntent }: SwapScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 24,
     justifyContent: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: theme.colors.surface,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: '800',
     textAlign: 'center',
-    marginBottom: 30
+    marginBottom: 30,
+    color: theme.colors.text,
   },
   option: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.colors.white,
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 16,
     marginBottom: 10,
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.line,
   },
   optionText: {
-    fontSize: 18
-  }
+    fontSize: 18,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
 });

@@ -1,4 +1,11 @@
+import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  '[RevenueCat]',
+]);
+
 
 import App from './App';
 

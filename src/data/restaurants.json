@@ -1,0 +1,136 @@
+[
+  {
+    "id": "store_green_table",
+    "name": "그린테이블 키친",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.4981,
+    "lng": 127.0276,
+    "address": "서울 강남구 테헤란로 12",
+    "isSubscribed": true,
+    "rating": 4.8,
+    "reviewCount": 128,
+    "menus": [
+      { "mealId": "salad", "mealName": "닭가슴살 샐러드", "price": 11900, "available": true },
+      { "mealId": "bibimbap", "mealName": "비빔밥", "price": 9800, "available": true }
+    ]
+  },
+  {
+    "id": "store_broth_lab",
+    "name": "브로스랩",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.5001,
+    "lng": 127.0325,
+    "address": "서울 강남구 강남대로 44",
+    "isSubscribed": true,
+    "rating": 4.7,
+    "reviewCount": 86,
+    "menus": [
+      { "mealId": "tofu_stew", "mealName": "순두부찌개", "price": 10000, "available": true },
+      { "mealId": "rice_soup", "mealName": "국밥", "price": 9500, "available": true }
+    ]
+  },
+  {
+    "id": "store_clean_bowl",
+    "name": "클린보울",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.5033,
+    "lng": 127.0253,
+    "address": "서울 강남구 역삼로 101",
+    "isSubscribed": false,
+    "rating": 4.6,
+    "reviewCount": 59,
+    "menus": [
+      { "mealId": "bibimbap", "mealName": "비빔밥", "price": 9300, "available": true },
+      { "mealId": "rice_noodle", "mealName": "쌀국수", "price": 10500, "available": true }
+    ]
+  },
+  {
+    "id": "store_protein_house",
+    "name": "프로틴하우스",
+    "merchantStatus": "active",
+    "onboardingStatus": "payment_verified",
+    "lat": 37.497,
+    "lng": 127.035,
+    "address": "서울 강남구 봉은사로 77",
+    "isSubscribed": true,
+    "rating": 4.5,
+    "reviewCount": 35,
+    "menus": [
+      { "mealId": "bulgogi", "mealName": "불고기", "price": 13500, "available": true },
+      { "mealId": "samgyetang", "mealName": "삼계탕", "price": 16000, "available": true }
+    ]
+  },
+  {
+    "id": "store_noodle_room",
+    "name": "누들룸",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.4955,
+    "lng": 127.0297,
+    "address": "서울 강남구 선릉로 50",
+    "isSubscribed": false,
+    "rating": 4.2,
+    "reviewCount": 20,
+    "menus": [
+      { "mealId": "kalguksu", "mealName": "칼국수", "price": 9000, "available": true },
+      { "mealId": "ramyeon", "mealName": "라면", "price": 6500, "available": true }
+    ]
+  },
+  {
+    "id": "store_bunsik_corner",
+    "name": "분식코너",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.4992,
+    "lng": 127.0301,
+    "address": "서울 강남구 테헤란로 41",
+    "isSubscribed": false,
+    "rating": 4.4,
+    "reviewCount": 47,
+    "menus": [
+      { "mealId": "kimbap", "mealName": "김밥", "price": 4500, "available": true },
+      { "mealId": "udon", "mealName": "우동", "price": 7000, "available": true },
+      { "mealId": "mandu_soup", "mealName": "만둣국", "price": 8500, "available": true },
+      { "mealId": "tuna_kimbap", "mealName": "참치김밥", "price": 5500, "available": true }
+    ]
+  },
+  {
+    "id": "store_hansik_daily",
+    "name": "한식데일리",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.4968,
+    "lng": 127.0265,
+    "address": "서울 강남구 강남대로 84",
+    "isSubscribed": true,
+    "rating": 4.6,
+    "reviewCount": 92,
+    "menus": [
+      { "mealId": "soybean_paste_stew", "mealName": "된장찌개", "price": 9000, "available": true },
+      { "mealId": "kimchi_stew", "mealName": "김치찌개", "price": 9500, "available": true },
+      { "mealId": "spicy_pork_bowl", "mealName": "제육덮밥", "price": 10500, "available": true },
+      { "mealId": "fried_rice", "mealName": "볶음밥", "price": 8500, "available": true }
+    ]
+  },
+  {
+    "id": "store_light_pick",
+    "name": "라이트픽",
+    "merchantStatus": "active",
+    "onboardingStatus": "store_live",
+    "lat": 37.5014,
+    "lng": 127.0289,
+    "address": "서울 강남구 테헤란로 77",
+    "isSubscribed": false,
+    "rating": 4.5,
+    "reviewCount": 41,
+    "menus": [
+      { "mealId": "poke_bowl", "mealName": "연어 포케", "price": 13500, "available": true },
+      { "mealId": "sandwich", "mealName": "샌드위치", "price": 7800, "available": true },
+      { "mealId": "egg_sandwich", "mealName": "에그샌드위치", "price": 6900, "available": true },
+      { "mealId": "cup_salad_combo", "mealName": "컵샐러드 조합", "price": 8200, "available": true }
+    ]
+  }
+]

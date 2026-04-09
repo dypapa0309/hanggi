@@ -22,7 +22,8 @@ export const diningTypeLabels: Record<string, string> = {
 export const goalLabels: Record<string, string> = {
   free: '자유식',
   balance: '균형식',
-  diet: '감량식'
+  diet: '다이어트',
+  gogodang: '고고당'
 };
 
 export const weatherLabels: Record<string, string> = {

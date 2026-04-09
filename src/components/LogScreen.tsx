@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useAppStore } from '../store';
 import rawMenusData from '../data/menus.json';
+import AppShell from './AppShell';
+import { theme } from '../theme';
 
 interface MealByTime {
   time: string;
@@ -57,78 +59,74 @@ export default function LogScreen() {
   }, [mealLogs]);
 
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {logData.map(dayData => (
-          <View key={dayData.day} style={styles.dayRow}>
-            <Text style={styles.dayLabel}>{dayData.day}</Text>
-            {dayData.timeGroups.length > 0 ? (
-              <View style={styles.timeSlotsWrap}>
-                {dayData.timeGroups.map(timeGroup => (
-                  <View key={`${dayData.day}-${timeGroup.time}`} style={styles.timeCard}>
-                    <View style={[styles.timeBadge, getTimeBadgeStyle(timeGroup.time)]}>
-                      <Text style={styles.timeBadgeLabel}>{timeGroup.timeLabel}</Text>
+    <AppShell activeRoute="Calendar" title="먹은 기록">
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+          {logData.map(dayData => (
+            <View key={dayData.day} style={styles.dayRow}>
+              <Text style={styles.dayLabel}>{dayData.day}</Text>
+              {dayData.timeGroups.length > 0 ? (
+                <View style={styles.timeSlotsWrap}>
+                  {dayData.timeGroups.map(timeGroup => (
+                    <View key={`${dayData.day}-${timeGroup.time}`} style={styles.timeCard}>
+                      <View style={[styles.timeBadge, getTimeBadgeStyle()]}>
+                        <Text style={styles.timeBadgeLabel}>{timeGroup.timeLabel}</Text>
+                      </View>
+                      <View style={styles.mealsInTime}>
+                        {timeGroup.meals.map(meal => (
+                          <Text key={`${meal.id}-${dayData.day}`} style={styles.meal}>
+                            • {meal.name}
+                          </Text>
+                        ))}
+                      </View>
                     </View>
-                    <View style={styles.mealsInTime}>
-                      {timeGroup.meals.map(meal => (
-                        <Text key={`${meal.id}-${dayData.day}`} style={styles.meal}>
-                          • {meal.name}
-                        </Text>
-                      ))}
-                    </View>
-                  </View>
-                ))}
-              </View>
-            ) : (
-              <Text style={styles.noMeal}>기록 없음</Text>
-            )}
-          </View>
-        ))}
-      </ScrollView>
-    </View>
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.noMeal}>기록 없음</Text>
+              )}
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    </AppShell>
   );
 }
 
-function getTimeBadgeStyle(time: string) {
-  const map: Record<string, { backgroundColor: string }> = {
-    breakfast: { backgroundColor: '#FFE5B4' },
-    lunch: { backgroundColor: '#FFD4A3' },
-    dinner: { backgroundColor: '#E8B0C9' },
-    late: { backgroundColor: '#6B5CE7' },
-  };
-  return map[time] ?? map.lunch;
+function getTimeBadgeStyle() {
+  return { backgroundColor: theme.colors.primarySoft };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#F7F8FC',
+    backgroundColor: 'transparent',
+  },
+  scrollContent: {
+    paddingBottom: 18,
   },
   dayRow: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.radius.md,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+    ...theme.shadow.card,
   },
   dayLabel: {
     fontSize: 16,
     fontWeight: '700',
     marginBottom: 10,
-    color: '#222',
+    color: theme.colors.text,
   },
   timeSlotsWrap: {
-    gap: 8,
+    marginTop: -8,
   },
   timeCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
+    marginTop: 8,
   },
   timeBadge: {
     paddingVertical: 3,
@@ -140,19 +138,20 @@ const styles = StyleSheet.create({
   timeBadgeLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#333',
+    color: theme.colors.deep,
   },
   mealsInTime: {
     flex: 1,
+    marginLeft: 10,
   },
   meal: {
     fontSize: 14,
-    color: '#555',
+    color: theme.colors.muted,
     lineHeight: 20,
   },
   noMeal: {
     fontSize: 14,
-    color: '#999',
+    color: theme.colors.muted,
     fontStyle: 'italic',
   },
 });

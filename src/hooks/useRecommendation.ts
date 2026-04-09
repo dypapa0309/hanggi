@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Meal, AppState } from '../types';
+import { useEffect, useMemo, useState } from 'react';
+import { AppState, Meal, RecommendationResult } from '../types';
 import { recommendMeal } from '../core/engine';
 import { useAppStore } from '../store';
 import rawMenusData from '../data/menus.json';
@@ -7,21 +7,39 @@ import rawMenusData from '../data/menus.json';
 const menusData = rawMenusData as unknown as Meal[];
 
 export function useRecommendation(state: AppState) {
-  const { user, mealLogs } = useAppStore();
-  const [recommendation, setRecommendation] = useState<{ meal: Meal; reason: string } | null>(null);
+  const { user, mealLogs, recommendationSession } = useAppStore();
+  const [recommendation, setRecommendation] = useState<RecommendationResult | null>(null);
+
+  const availableMeals = useMemo(
+    () => menusData.filter((meal) => !user.dislikes.includes(meal.name)),
+    [user.dislikes]
+  );
 
   useEffect(() => {
-    const availableMeals = menusData.filter((meal: Meal) => !user.dislikes.includes(meal.name));
-    const rec = recommendMeal(availableMeals, state, mealLogs);
+    if (!recommendationSession.condition || recommendationSession.completedForTime === state.time) {
+      setRecommendation(null);
+      return;
+    }
+
+    const rec = recommendMeal(availableMeals, state, mealLogs, recommendationSession.recommendedMealIds);
     setRecommendation(rec);
-  }, [JSON.stringify(state), user.dislikes.join(','), JSON.stringify(mealLogs)]);
+  }, [
+    availableMeals,
+    mealLogs,
+    recommendationSession.condition,
+    recommendationSession.completedForTime,
+    recommendationSession.recommendedMealIds,
+    state,
+  ]);
 
   const regenerate = () => {
-    const availableMeals = menusData.filter((meal: Meal) => !user.dislikes.includes(meal.name));
-    const randomState = { ...state, intent: 'random' as const };
-    const rec = recommendMeal(availableMeals, randomState, mealLogs);
+    if (recommendationSession.completedForTime === state.time) {
+      setRecommendation(null);
+      return;
+    }
+    const rec = recommendMeal(availableMeals, state, mealLogs, recommendationSession.recommendedMealIds);
     setRecommendation(rec);
   };
 
-  return { recommendation, regenerate };
+  return { recommendation, regenerate, menus: availableMeals };
 }

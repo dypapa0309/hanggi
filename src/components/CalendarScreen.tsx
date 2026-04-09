@@ -2,15 +2,90 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useAppStore } from '../store';
 import rawMenusData from '../data/menus.json';
+import AppShell from './AppShell';
+import { theme } from '../theme';
+
+// --- 기록 뷰 ---
+function LogView() {
+  const { mealLogs } = useAppStore();
+  const menus = rawMenusData as { id: string; name: string }[];
+
+  const logData = useMemo(() => {
+    const days = 14;
+    const today = new Date();
+    const map: Record<string, { time: string; timeLabel: string; meals: { name: string }[] }[]> = {};
+
+    for (let i = 0; i < days; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      const key = toLocalDateStr(date);
+      map[key] = [
+        { time: 'breakfast', timeLabel: '아침', meals: [] },
+        { time: 'lunch', timeLabel: '점심', meals: [] },
+        { time: 'dinner', timeLabel: '저녁', meals: [] },
+        { time: 'late', timeLabel: '야식', meals: [] },
+      ];
+    }
+
+    mealLogs.forEach(log => {
+      const key = toLocalDateStr(log.eatenAt);
+      if (!map[key]) return;
+      const meal = menus.find(m => m.id === log.mealId);
+      const name = meal ? meal.name : log.mealId;
+      const slot = map[key].find(t => t.time === (log.time ?? 'lunch'));
+      if (slot && !slot.meals.find(m => m.name === name)) slot.meals.push({ name });
+    });
+
+    return Object.entries(map).map(([day, slots]) => ({
+      day,
+      slots: slots.filter(s => s.meals.length > 0),
+    }));
+  }, [mealLogs]);
+
+  return (
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 12 }}>
+      {logData.map(d => (
+        <View key={d.day} style={logStyles.dayRow}>
+          <Text style={logStyles.dayLabel}>{d.day}</Text>
+          {d.slots.length === 0
+            ? <Text style={logStyles.empty}>기록 없음</Text>
+            : d.slots.map(s => (
+              <View key={s.time} style={logStyles.slotRow}>
+                <View style={logStyles.badge}>
+                  <Text style={logStyles.badgeText}>{s.timeLabel}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  {s.meals.map(m => (
+                    <Text key={m.name} style={logStyles.meal}>• {m.name}</Text>
+                  ))}
+                </View>
+              </View>
+            ))
+          }
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
+const logStyles = StyleSheet.create({
+  dayRow: {
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.radius.md,
+    padding: 14,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+  },
+  dayLabel: { fontSize: 15, fontWeight: '700', color: theme.colors.text, marginBottom: 8 },
+  empty: { fontSize: 13, color: theme.colors.muted, fontStyle: 'italic' },
+  slotRow: { flexDirection: 'row', alignItems: 'flex-start', marginTop: 6 },
+  badge: { paddingVertical: 3, paddingHorizontal: 8, borderRadius: 6, minWidth: 40, alignItems: 'center' },
+  badgeText: { fontSize: 11, fontWeight: '700', color: theme.colors.deep },
+  meal: { fontSize: 14, color: theme.colors.muted, lineHeight: 20, marginLeft: 10 },
+});
 
 const DAYS_OF_WEEK = ['일', '월', '화', '수', '목', '금', '토'];
-
-const TIME_COLORS: Record<string, string> = {
-  breakfast: '#FFD166',
-  lunch: '#FF9A3C',
-  dinner: '#E066A0',
-  late: '#6B5CE7',
-};
 
 const TIME_LABELS: Record<string, string> = {
   breakfast: '아침',
@@ -37,6 +112,7 @@ export default function LogScreen() {
   const today = new Date();
   const todayStr = toLocalDateStr(today);
 
+  const [showLog, setShowLog] = useState(false);
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
   const [selectedDate, setSelectedDate] = useState<string>(todayStr);
@@ -92,11 +168,29 @@ export default function LogScreen() {
   const selDateObj = new Date(selectedDate + 'T00:00:00');
 
   return (
-    <ScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 32 }}
-    >
+    <AppShell activeRoute="Calendar" title={showLog ? '기록' : '달력'}>
+      {/* 토글 */}
+      <View style={styles.toggle}>
+        <TouchableOpacity
+          style={[styles.toggleBtn, !showLog && styles.toggleBtnActive]}
+          onPress={() => setShowLog(false)}
+        >
+          <Text style={[styles.toggleText, !showLog && styles.toggleTextActive]}>달력</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.toggleBtn, showLog && styles.toggleBtnActive]}
+          onPress={() => setShowLog(true)}
+        >
+          <Text style={[styles.toggleText, showLog && styles.toggleTextActive]}>기록</Text>
+        </TouchableOpacity>
+      </View>
+
+      {showLog ? <LogView /> : (
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 18 }}
+      >
       {/* 월 네비게이션 */}
       <View style={styles.monthNav}>
         <TouchableOpacity onPress={prevMonth} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
@@ -157,7 +251,7 @@ export default function LogScreen() {
                         {uniqueTimes.slice(0, 4).map(t => (
                           <View
                             key={t}
-                            style={[styles.dot, { backgroundColor: TIME_COLORS[t] ?? '#ccc' }]}
+                            style={styles.dot}
                           />
                         ))}
                       </View>
@@ -184,7 +278,7 @@ export default function LogScreen() {
             if (items.length === 0) return null;
             return (
               <View key={t} style={styles.mealTimeRow}>
-                <View style={[styles.badge, { backgroundColor: TIME_COLORS[t] }]}>
+                <View style={styles.badge}>
                   <Text style={styles.badgeText}>{TIME_LABELS[t]}</Text>
                 </View>
                 <View style={{ flex: 1 }}>
@@ -202,21 +296,47 @@ export default function LogScreen() {
       <View style={styles.legend}>
         {Object.entries(TIME_LABELS).map(([t, label]) => (
           <View key={t} style={styles.legendItem}>
-            <View style={[styles.dot, { backgroundColor: TIME_COLORS[t] }]} />
+            <View style={styles.dot} />
             <Text style={styles.legendText}>{label}</Text>
           </View>
         ))}
       </View>
-    </ScrollView>
+      </ScrollView>
+      )}
+    </AppShell>
   );
 }
 
 const styles = StyleSheet.create({
+  toggle: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.radius.pill,
+    padding: 4,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+    alignSelf: 'flex-start',
+  },
+  toggleBtn: {
+    paddingHorizontal: 18,
+    paddingVertical: 7,
+    borderRadius: theme.radius.pill,
+  },
+  toggleBtnActive: {
+    backgroundColor: theme.colors.primary,
+  },
+  toggleText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.colors.muted,
+  },
+  toggleTextActive: {
+    color: theme.colors.white,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#F7F8FC',
-    paddingHorizontal: 16,
-    paddingTop: 16,
+    backgroundColor: 'transparent',
   },
   monthNav: {
     flexDirection: 'row',
@@ -227,25 +347,23 @@ const styles = StyleSheet.create({
   },
   navArrow: {
     fontSize: 32,
-    color: '#4f6dff',
+    color: theme.colors.primary,
     lineHeight: 36,
     fontWeight: '300',
   },
   monthTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#222',
+    color: theme.colors.text,
   },
   calendar: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.radius.md,
     overflow: 'hidden',
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+    ...theme.shadow.card,
   },
   weekRow: {
     flexDirection: 'row',
@@ -253,80 +371,79 @@ const styles = StyleSheet.create({
   headerCell: {
     alignItems: 'center',
     paddingVertical: 10,
-    backgroundColor: '#f8f9ff',
+    backgroundColor: theme.colors.surface,
   },
   headerText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#888',
+    color: theme.colors.muted,
   },
   sunText: {
-    color: '#ff5e5e',
+    color: theme.colors.primary,
   },
   satText: {
-    color: '#4f6dff',
+    color: theme.colors.deep,
   },
   dayCell: {
     alignItems: 'center',
     paddingTop: 6,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: '#f0f0f0',
+    borderColor: theme.colors.line,
   },
   selectedCell: {
-    backgroundColor: '#4f6dff',
+    backgroundColor: theme.colors.primary,
   },
   dayNum: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#333',
+    color: theme.colors.text,
     marginBottom: 3,
   },
   todayNum: {
     fontWeight: '800',
-    color: '#4f6dff',
+    color: theme.colors.primary,
   },
   selectedNum: {
-    color: '#fff',
+    color: theme.colors.white,
     fontWeight: '700',
   },
   dotRow: {
     flexDirection: 'row',
-    gap: 2,
   },
   dot: {
     width: 5,
     height: 5,
     borderRadius: 3,
+    marginHorizontal: 1,
+    backgroundColor: theme.colors.primary,
   },
   detailCard: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.radius.md,
     padding: 18,
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
+    borderWidth: 1,
+    borderColor: theme.colors.line,
+    ...theme.shadow.card,
   },
   detailTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#222',
+    color: theme.colors.text,
     marginBottom: 12,
   },
   noMeal: {
     fontSize: 14,
-    color: '#aaa',
+    color: theme.colors.muted,
     fontStyle: 'italic',
   },
   mealTimeRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
     marginBottom: 8,
   },
   badge: {
+    backgroundColor: theme.colors.primarySoft,
     paddingVertical: 3,
     paddingHorizontal: 8,
     borderRadius: 6,
@@ -336,26 +453,26 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#fff',
+    color: theme.colors.deep,
   },
   mealText: {
     fontSize: 14,
-    color: '#444',
+    color: theme.colors.muted,
     lineHeight: 20,
   },
   legend: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 16,
     paddingBottom: 8,
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    marginHorizontal: 8,
   },
   legendText: {
     fontSize: 12,
-    color: '#666',
+    color: theme.colors.muted,
+    marginLeft: 5,
   },
 });
