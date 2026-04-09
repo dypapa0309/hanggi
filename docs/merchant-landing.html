@@ -197,6 +197,13 @@
         margin-bottom: 6px;
       }
 
+      .price-box strong.strikethrough {
+        color: var(--muted);
+        text-decoration: line-through;
+        text-decoration-thickness: 2px;
+        text-decoration-color: rgba(76, 62, 49, 0.35);
+      }
+
       .price-box span {
         display: block;
         color: var(--muted);
@@ -579,7 +586,7 @@
               <span>초기 프로모션 기간에 적용되는 시작가입니다.</span>
             </div>
             <div class="price-box">
-              <strong>월 14,900원</strong>
+              <strong class="strikethrough">월 14,900원</strong>
               <span>프로모션 기간 종료 후 적용되는 정상 요금입니다.</span>
             </div>
           </div>
@@ -862,7 +869,7 @@
           sms_sent_at: payload.sms_sent_at,
         };
 
-        const extendedAttempt = await db.from('sales_leads').insert(extendedPayload).select('id').single();
+        const extendedAttempt = await db.from('sales_leads').insert(extendedPayload);
         if (!extendedAttempt.error) {
           return extendedAttempt;
         }
@@ -872,7 +879,7 @@
           phone: payload.phone,
           source: payload.source,
           memo: legacyMemo,
-        }).select('id').single();
+        });
 
         return legacyAttempt;
       }
