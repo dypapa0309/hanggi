@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>한끼비서 파트너 지원</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <style>
+      :root {
+        --primary: #f6a548;
+        --deep: #4c3e31;
+        --muted: #8f7b6b;
+        --surface: #fff7f0;
+        --line: #ecdccf;
+        --white: #ffffff;
+        --warning: #fff0d8;
+        --error: #d93025;
+        --success: #2f7d5a;
+        --shadow: 0 12px 28px rgba(76, 62, 49, 0.08);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        min-height: 100vh;
+        color: var(--deep);
+        background:
+          radial-gradient(circle at top right, rgba(246, 165, 72, 0.18), transparent 28%),
+          linear-gradient(180deg, #fffaf5 0%, #fffdf9 100%);
+      }
+
+      .wrap {
+        max-width: 540px;
+        margin: 0 auto;
+        padding: 18px 18px 42px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .brand-title {
+        font-size: 17px;
+        font-weight: 800;
+      }
+
+      .progress-pill {
+        font-size: 12px;
+        color: var(--muted);
+        padding: 9px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid var(--line);
+      }
+
+      .slide {
+        display: none;
+        min-height: calc(100vh - 120px);
+        align-items: center;
+      }
+
+      .slide.active { display: flex; }
+
+      .card {
+        width: 100%;
+        background: rgba(255,255,255,0.94);
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        padding: 28px 22px 24px;
+        box-shadow: var(--shadow);
+      }
+
+      h1, h2 { line-height: 1.28; }
+      h1 { font-size: 31px; font-weight: 900; margin-bottom: 14px; }
+      h2 { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+
+      .lead {
+        font-size: 16px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .point-list, .field-grid, .choice-grid, .check-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .point-item, .choice-option, .check-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 15px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .dot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(246,165,72,0.18);
+        color: var(--deep);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+      }
+
+      .field label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+
+      input, textarea, select {
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #fffaf4;
+        color: var(--deep);
+        padding: 14px 15px;
+        font-size: 15px;
+        font-family: inherit;
+        outline: none;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .choice-option input[type='radio'],
+      .check-item input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+      }
+
+      .contract-box {
+        margin-top: 16px;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: #fffaf4;
+        padding: 18px;
+        max-height: 360px;
+        overflow-y: auto;
+        font-size: 14px;
+        line-height: 1.8;
+      }
+
+      .contract-box h3 { font-size: 17px; margin-bottom: 12px; }
+      .contract-box p + p { margin-top: 12px; }
+
+      .contract-meta {
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .notice {
+        margin-top: 16px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: var(--warning);
+        color: #7a5700;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .error-msg {
+        display: none;
+        margin-top: 12px;
+        color: var(--error);
+        font-size: 13px;
+      }
+
+      .nav {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .btn, .btn-secondary {
+        border: none;
+        border-radius: 999px;
+        padding: 15px 18px;
+        font-size: 16px;
+        font-weight: 900;
+        font-family: inherit;
+        cursor: pointer;
+      }
+
+      .btn { flex: 1; background: var(--primary); color: var(--deep); }
+      .btn-secondary {
+        min-width: 110px;
+        background: var(--white);
+        color: var(--deep);
+        border: 1px solid var(--line);
+      }
+
+      .success-view {
+        display: none;
+        min-height: calc(100vh - 120px);
+        align-items: center;
+      }
+
+      .success-card {
+        width: 100%;
+        text-align: center;
+        background: rgba(255,255,255,0.96);
+        border: 1px solid var(--line);
+        border-radius: 32px;
+        padding: 42px 24px 34px;
+        box-shadow: var(--shadow);
+      }
+
+      .success-icon {
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        background: rgba(47,125,90,0.12);
+        color: var(--success);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <div class="topbar">
+        <div class="brand-title">한끼비서 파트너 지원</div>
+        <div class="progress-pill" id="progress-pill">1 / 5</div>
+      </div>
+
+      <section class="slide active" data-slide="1">
+        <div class="card">
+          <h1>한끼비서와 함께 사장님 영업을 맡아주실 파트너를 찾고 있어요.</h1>
+          <p class="lead">지역 매장 제휴를 함께 만들어갈 파트너를 모집합니다. 업체 정보와 영업 가능 지역을 남겨주시면 검토 후 연락드립니다.</p>
+          <div class="point-list">
+            <div class="point-item"><span class="dot">1</span><div>사장님 영업 및 제휴 확장</div></div>
+            <div class="point-item"><span class="dot">2</span><div>계약 성사 기준 영업 수수료 지급</div></div>
+            <div class="point-item"><span class="dot">3</span><div>지역 단위 영업 가능 범위 협의</div></div>
+          </div>
+          <div class="nav">
+            <button class="btn" type="button" onclick="goToSlide(2)">다음</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="2">
+        <div class="card">
+          <h2>한끼비서 파트너 수수료는 30%입니다.</h2>
+          <p class="lead">계약이 성사된 매장 기준으로 영업피 30% 조건으로 진행합니다. 세부 지급 방식은 최종 협의 후 확정됩니다.</p>
+          <div class="notice">영업 지역과 운영 방식은 지역 상황에 따라 조정될 수 있습니다.</div>
+          <div class="nav">
+            <button class="btn-secondary" type="button" onclick="goToSlide(1)">이전</button>
+            <button class="btn" type="button" onclick="goToSlide(3)">다음</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="3">
+        <div class="card">
+          <h2>업체 정보와 영업 가능 지역을 알려주세요.</h2>
+          <div class="field-grid">
+            <div class="field">
+              <label for="company_name">업체명 또는 팀명 *</label>
+              <input id="company_name" type="text" placeholder="예: 홍대 제휴영업팀" />
+            </div>
+            <div class="field">
+              <label for="contact_name">담당자 이름 *</label>
+              <input id="contact_name" type="text" placeholder="성함" />
+            </div>
+            <div class="field">
+              <label for="phone">연락처 *</label>
+              <input id="phone" type="tel" placeholder="010-0000-0000" />
+            </div>
+            <div class="field">
+              <label for="address">업체 주소</label>
+              <input id="address" type="text" placeholder="예: 서울 마포구" />
+            </div>
+            <div class="field">
+              <label for="sales_region">영업 가능 지역 *</label>
+              <select id="sales_region">
+                <option value="">선택해주세요</option>
+                <option value="seoul">서울</option>
+                <option value="gyeonggi">경기</option>
+                <option value="incheon">인천</option>
+                <option value="gangwon">강원</option>
+                <option value="chungcheong">충청</option>
+                <option value="jeolla">전라</option>
+                <option value="gyeongsang">경상</option>
+                <option value="jeju">제주</option>
+                <option value="nationwide">전국 가능</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="memo">추가 메모</label>
+              <textarea id="memo" placeholder="영업 경력, 가능한 지역, 소개하고 싶은 내용을 적어주세요."></textarea>
+            </div>
+          </div>
+          <div id="error-basic" class="error-msg"></div>
+          <div class="nav">
+            <button class="btn-secondary" type="button" onclick="goToSlide(2)">이전</button>
+            <button class="btn" type="button" onclick="validatePartnerInfo()">다음</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="4" id="contract-view">
+        <div class="card">
+          <h2>영업 파트너 계약 내용을 확인해주세요.</h2>
+          <div class="contract-box" id="contract-text">
+            <h3>한끼비서 영업 파트너 계약서</h3>
+            <p>본 계약은 한끼비서 사장님 영업 및 제휴 활동을 위한 기본 조건을 정하기 위한 문서입니다.</p>
+            <p><strong>제1조 (업무 범위)</strong><br />파트너는 한끼비서 사장님 가입 영업, 매장 제휴 제안 및 운영팀과의 연결 업무를 수행합니다.</p>
+            <p><strong>제2조 (영업피)</strong><br />계약 성사 기준 영업 수수료는 30%이며, 지급 기준과 시점은 개별 안내 및 정산 정책에 따릅니다.</p>
+            <p><strong>제3조 (영업 지역)</strong><br />파트너가 선택한 영업 가능 지역을 기준으로 협의하며, 필요 시 지역 조정이 가능합니다.</p>
+            <p><strong>제4조 (정보 제공)</strong><br />업체명, 담당자 연락처, 주소, 영업 가능 지역 등 제공 정보는 정확해야 하며 변경 시 고지해야 합니다.</p>
+            <p><strong>제5조 (개인정보 및 연락)</strong><br />입력한 정보는 영업 파트너 검토, 계약 안내, 후속 협의를 위해 사용됩니다.</p>
+          </div>
+          <div class="contract-meta">계약 버전: <span id="contract-version">2026-04-09-partner-v1</span></div>
+          <div class="nav">
+            <button class="btn-secondary" type="button" onclick="goToSlide(3)">이전</button>
+            <button class="btn" type="button" onclick="goToSlide(5)">다음</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="5">
+        <div class="card">
+          <h2>동의 후 전송해주세요.</h2>
+          <div class="check-list">
+            <label class="check-item">
+              <input id="agree_contract" type="checkbox" />
+              <span>영업 파트너 계약 내용을 확인했고 동의합니다.</span>
+            </label>
+            <label class="check-item">
+              <input id="agree_sms" type="checkbox" />
+              <span>입력한 번호로 계약 내용을 문자 앱으로 보내는 데 동의합니다.</span>
+            </label>
+          </div>
+          <div class="notice">저장 후 문자 앱이 열리며, 계약 내용을 확인한 뒤 직접 전송하시면 됩니다.</div>
+          <div id="error-submit" class="error-msg"></div>
+          <div class="nav">
+            <button class="btn-secondary" type="button" onclick="goToSlide(4)">이전</button>
+            <button class="btn" id="submit-btn" type="button" onclick="handleSubmit()">전송하기</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="success-view" id="success-view">
+        <div class="success-card">
+          <div class="success-icon">✓</div>
+          <h2>지원이 완료됐습니다</h2>
+          <p id="success-message">저장 후 문자 앱이 열리면 계약 내용을 확인하고 전송해주세요.</p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const SUPABASE_URL = 'https://bfdesyathuzrbagemhoe.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmZGVzeWF0aHV6cmJhZ2VtaG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDQ4MDEsImV4cCI6MjA5MTIyMDgwMX0.DUY-bvmCT-jRwLlRO2aCXeV3uDjG7-bCiCHRCfUmd3Q';
+      const CONTRACT_VERSION = '2026-04-09-partner-v1';
+      const TOTAL_SLIDES = 5;
+      const { createClient } = supabase;
+      const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      let currentSlide = 1;
+
+      function updateProgress() {
+        document.getElementById('progress-pill').textContent = `${currentSlide} / ${TOTAL_SLIDES}`;
+      }
+
+      function clearErrors() {
+        document.querySelectorAll('.error-msg').forEach((el) => {
+          el.style.display = 'none';
+          el.textContent = '';
+        });
+      }
+
+      function showError(id, message) {
+        const el = document.getElementById(id);
+        el.textContent = message;
+        el.style.display = 'block';
+      }
+
+      function goToSlide(index) {
+        clearErrors();
+        currentSlide = index;
+        document.querySelectorAll('.slide').forEach((slide) => {
+          slide.classList.toggle('active', Number(slide.dataset.slide) === index);
+        });
+        updateProgress();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function sanitizePhone(value) {
+        return value.replace(/[^0-9]/g, '');
+      }
+
+      function formatPhoneDisplay(value) {
+        const digits = sanitizePhone(value);
+        if (digits.length === 11) {
+          return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+        }
+        return value;
+      }
+
+      function getSalesRegionLabel(value) {
+        const labels = {
+          seoul: '서울',
+          gyeonggi: '경기',
+          incheon: '인천',
+          gangwon: '강원',
+          chungcheong: '충청',
+          jeolla: '전라',
+          gyeongsang: '경상',
+          jeju: '제주',
+          nationwide: '전국 가능',
+        };
+        return labels[value] ?? value;
+      }
+
+      function validatePartnerInfo() {
+        clearErrors();
+        const companyName = document.getElementById('company_name').value.trim();
+        const contactName = document.getElementById('contact_name').value.trim();
+        const phone = sanitizePhone(document.getElementById('phone').value.trim());
+        const salesRegion = document.getElementById('sales_region').value;
+        if (!companyName || !contactName || !phone || !salesRegion) {
+          showError('error-basic', '필수 항목을 모두 입력해주세요.');
+          return;
+        }
+        if (phone.length < 10) {
+          showError('error-basic', '휴대폰 번호를 정확히 입력해주세요.');
+          return;
+        }
+        document.getElementById('phone').value = formatPhoneDisplay(phone);
+        goToSlide(4);
+      }
+
+      function buildContractSummary(formData) {
+        return [
+          `[한끼비서 영업 파트너 계약 안내]`,
+          `업체명: ${formData.company_name}`,
+          `담당자: ${formData.contact_name}`,
+          `영업 지역: ${getSalesRegionLabel(formData.sales_region)}`,
+          `영업피: 30%`,
+          `계약 버전: ${CONTRACT_VERSION}`,
+          `계약 확인: ${window.location.origin}${window.location.pathname}?view=contract`,
+        ].join('\n');
+      }
+
+      function buildSmsUrl(phone, message) {
+        const digits = sanitizePhone(phone);
+        const encodedMessage = encodeURIComponent(message);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const separator = isIOS ? '&' : '?';
+        return `sms:${digits}${separator}body=${encodedMessage}`;
+      }
+
+      function openSmsComposer(phone, message) {
+        window.location.href = buildSmsUrl(phone, message);
+      }
+
+      async function handleSubmit() {
+        clearErrors();
+        if (!document.getElementById('agree_contract').checked) {
+          showError('error-submit', '계약 내용을 확인하고 동의해주세요.');
+          return;
+        }
+        if (!document.getElementById('agree_sms').checked) {
+          showError('error-submit', '계약 문자 동의가 필요합니다.');
+          return;
+        }
+
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '전송 중...';
+
+        const formData = {
+          company_name: document.getElementById('company_name').value.trim(),
+          contact_name: document.getElementById('contact_name').value.trim(),
+          phone: formatPhoneDisplay(document.getElementById('phone').value.trim()),
+          address: document.getElementById('address').value.trim(),
+          sales_region: document.getElementById('sales_region').value,
+          memo: document.getElementById('memo').value.trim(),
+        };
+
+        const agreedAt = new Date().toISOString();
+        const payload = {
+          company_name: formData.company_name,
+          contact_name: formData.contact_name,
+          phone: formData.phone,
+          address: formData.address,
+          sales_region: formData.sales_region,
+          commission_rate: 30,
+          agreed_to_contract: true,
+          contract_version: CONTRACT_VERSION,
+          agreed_at: agreedAt,
+          source: 'partner_landing_v1',
+          memo: JSON.stringify({
+            memo: formData.memo,
+            salesRegionLabel: getSalesRegionLabel(formData.sales_region),
+            smsMode: 'sms_app_handoff',
+          }),
+        };
+
+        const { error } = await db.from('partner_leads').insert(payload);
+        if (error) {
+          console.error(error);
+          showError('error-submit', '저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '전송하기';
+          return;
+        }
+
+        document.querySelectorAll('.slide').forEach((slide) => slide.classList.remove('active'));
+        document.getElementById('success-view').style.display = 'flex';
+        setTimeout(() => {
+          openSmsComposer(formData.phone, buildContractSummary(formData));
+        }, 150);
+      }
+
+      function initContractViewMode() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('view') !== 'contract') return;
+        document.querySelectorAll('.slide').forEach((slide) => slide.classList.remove('active'));
+        goToSlide(4);
+      }
+
+      updateProgress();
+      initContractViewMode();
+    </script>
+  </body>
+</html>

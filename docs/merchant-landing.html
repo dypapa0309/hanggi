@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>한끼비서 파트너 가입</title>
+    <title>한끼비서 사장님 가입</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <style>
       :root {
@@ -223,6 +223,28 @@
         display: grid;
         gap: 12px;
         margin-top: 18px;
+      }
+
+      .choice-grid {
+        display: grid;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .choice-option {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 15px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .choice-option input[type='radio'] {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
       }
 
       .field {
@@ -482,7 +504,7 @@
   <body>
     <main class="wrap">
       <div class="topbar">
-        <div class="brand-title">파트너 가입 안내</div>
+        <div class="brand-title">사장님 가입 안내</div>
         <div class="progress-pill" id="progress-pill">1 / 10</div>
       </div>
 
@@ -621,6 +643,23 @@
               <label for="address">매장 주소 *</label>
               <input id="address" type="text" placeholder="도로명 주소" />
             </div>
+            <div class="field">
+              <label>계약 기간 *</label>
+              <div class="choice-grid">
+                <label class="choice-option">
+                  <input type="radio" name="contract_term" value="monthly" checked />
+                  <span>매월 결제</span>
+                </label>
+                <label class="choice-option">
+                  <input type="radio" name="contract_term" value="yearly" />
+                  <span>1년 결제</span>
+                </label>
+                <label class="choice-option">
+                  <input type="radio" name="contract_term" value="two_years" />
+                  <span>2년 결제</span>
+                </label>
+              </div>
+            </div>
           </div>
           <div id="error-basic" class="error-msg"></div>
           <div class="nav">
@@ -662,14 +701,15 @@
           <h2>계약 내용을 확인해주세요.</h2>
           <p class="lead">실제 제출 전에 아래 내용을 확인하신 뒤 동의 여부를 선택하게 됩니다.</p>
           <div class="contract-box" id="contract-text">
-            <h3>한끼비서 파트너 이용 계약서</h3>
-            <p>본 계약은 한끼비서 파트너 서비스 이용에 관한 기본 사항을 정하기 위한 문서입니다.</p>
-            <p><strong>제1조 (서비스 내용)</strong><br />한끼비서는 사용자에게 메뉴 추천과 근처 외식 매장 추천 서비스를 제공하며, 파트너 매장은 해당 추천 흐름 안에서 노출될 수 있습니다.</p>
+            <h3>한끼비서 사장님 가입 계약서</h3>
+            <p>본 계약은 한끼비서 사장님 가입 및 매장 노출 서비스 이용에 관한 기본 사항을 정하기 위한 문서입니다.</p>
+            <p><strong>제1조 (서비스 내용)</strong><br />한끼비서는 사용자에게 메뉴 추천과 근처 외식 매장 추천 서비스를 제공하며, 사장님 매장은 해당 추천 흐름 안에서 노출될 수 있습니다.</p>
             <p><strong>제2조 (이용 요금)</strong><br />초기 프로모션 기간 동안 월 4,900원을 적용하며, 프로모션 종료 후에는 월 14,900원을 적용합니다. 실제 청구 시작 시점과 결제 방식은 별도 안내합니다.</p>
-            <p><strong>제3조 (노출 및 운영)</strong><br />매장 노출은 사용자 위치, 메뉴 적합도, 서비스 운영 정책 등에 따라 달라질 수 있으며 특정 노출 수나 주문 수를 보장하지 않습니다.</p>
-            <p><strong>제4조 (정보 제공)</strong><br />사장님은 매장명, 주소, 연락처, 대표 메뉴 및 추가 메뉴 등 기본 정보를 정확하게 제공해야 하며, 변경 시 수정 또는 재안내를 요청할 수 있습니다.</p>
-            <p><strong>제5조 (해지 및 변경)</strong><br />서비스 이용 중단이나 운영 정책 변경이 필요한 경우, 별도 안내에 따라 진행합니다. 요금 및 운영 정책이 바뀌는 경우 사전에 고지합니다.</p>
-            <p><strong>제6조 (개인정보 및 연락)</strong><br />입력한 휴대폰 번호와 매장 정보는 파트너 등록 검토, 계약 안내, 운영 연락을 위해 사용됩니다.</p>
+            <p><strong>제3조 (계약 기간)</strong><br />사장님은 매월 결제, 1년 결제, 2년 결제 중 원하는 계약 형태를 선택할 수 있으며, 실제 적용 방식은 안내 후 확정됩니다.</p>
+            <p><strong>제4조 (노출 및 운영)</strong><br />매장 노출은 사용자 위치, 메뉴 적합도, 서비스 운영 정책 등에 따라 달라질 수 있으며 특정 노출 수나 주문 수를 보장하지 않습니다.</p>
+            <p><strong>제5조 (정보 제공)</strong><br />사장님은 매장명, 주소, 연락처, 대표 메뉴 및 추가 메뉴 등 기본 정보를 정확하게 제공해야 하며, 변경 시 수정 또는 재안내를 요청할 수 있습니다.</p>
+            <p><strong>제6조 (해지 및 변경)</strong><br />서비스 이용 중단이나 운영 정책 변경이 필요한 경우, 별도 안내에 따라 진행합니다. 요금 및 운영 정책이 바뀌는 경우 사전에 고지합니다.</p>
+            <p><strong>제7조 (개인정보 및 연락)</strong><br />입력한 휴대폰 번호와 매장 정보는 파트너 등록 검토, 계약 안내, 운영 연락을 위해 사용됩니다.</p>
           </div>
           <div class="contract-meta">계약 버전: <span id="contract-version">2026-04-09-v1</span></div>
           <div class="nav">
@@ -772,6 +812,22 @@
           .filter(Boolean);
       }
 
+      function getContractTerm() {
+        return document.querySelector('input[name="contract_term"]:checked')?.value ?? 'monthly';
+      }
+
+      function getContractTermLabel(value) {
+        switch (value) {
+          case 'yearly':
+            return '1년 결제';
+          case 'two_years':
+            return '2년 결제';
+          case 'monthly':
+          default:
+            return '매월 결제';
+        }
+      }
+
       function addExtraMenu(value = '') {
         const stack = document.getElementById('extra-menus');
         const row = document.createElement('div');
@@ -829,6 +885,7 @@
           `[한끼비서 파트너 계약 안내]`,
           `매장명: ${formData.store_name}`,
           `대표 메뉴: ${formData.main_menu}`,
+          `계약 기간: ${getContractTermLabel(formData.contract_term)}`,
           `프로모션 요금: 월 4,900원`,
           `프로모션 종료 후: 월 14,900원`,
           `계약 버전: ${CONTRACT_VERSION}`,
@@ -860,6 +917,7 @@
           memo: legacyMemo,
           store_name: payload.store_name,
           address: payload.address,
+          contract_term: payload.contract_term,
           main_menu: payload.main_menu,
           extra_menus: payload.extra_menus,
           agreed_to_contract: payload.agreed_to_contract,
@@ -909,6 +967,7 @@
           owner_name: document.getElementById('owner_name').value.trim(),
           phone: formatPhoneDisplay(document.getElementById('phone').value.trim()),
           address: document.getElementById('address').value.trim(),
+          contract_term: getContractTerm(),
           main_menu: document.getElementById('main_menu').value.trim(),
           extra_menus: getExtraMenus(),
         };
@@ -920,6 +979,7 @@
         const memoPayload = {
           storeName: formData.store_name,
           address: formData.address,
+          contractTerm: formData.contract_term,
           mainMenu: formData.main_menu,
           extraMenus: formData.extra_menus,
           contractVersion: CONTRACT_VERSION,
@@ -937,6 +997,7 @@
             source: 'merchant_slides_v1',
             store_name: formData.store_name,
             address: formData.address,
+            contract_term: formData.contract_term,
             main_menu: formData.main_menu,
             extra_menus: formData.extra_menus,
             agreed_to_contract: true,

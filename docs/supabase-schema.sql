@@ -28,6 +28,7 @@ create table if not exists sales_leads (
 -- 사장님 모집 페이지 확장 필드 (이미 있으면 무시)
 alter table sales_leads add column if not exists store_name text;
 alter table sales_leads add column if not exists address text;
+alter table sales_leads add column if not exists contract_term text;
 alter table sales_leads add column if not exists main_menu text;
 alter table sales_leads add column if not exists extra_menus jsonb;
 alter table sales_leads add column if not exists agreed_to_contract boolean default false;
@@ -35,6 +36,23 @@ alter table sales_leads add column if not exists contract_version text;
 alter table sales_leads add column if not exists agreed_at timestamptz;
 alter table sales_leads add column if not exists sms_delivery_status text;
 alter table sales_leads add column if not exists sms_sent_at timestamptz;
+
+-- 영업 파트너 리드
+create table if not exists partner_leads (
+  id uuid primary key default gen_random_uuid(),
+  company_name text not null,
+  contact_name text not null,
+  phone text not null,
+  address text,
+  sales_region text,
+  commission_rate numeric(5,2) default 30.00,
+  agreed_to_contract boolean default false,
+  contract_version text,
+  agreed_at timestamptz,
+  source text default 'partner_landing',
+  memo text,
+  created_at timestamptz default now()
+);
 
 -- 사장님 계정
 create table if not exists merchant_accounts (
@@ -87,6 +105,7 @@ create table if not exists consumer_recommendation_events (
 
 -- RLS 활성화
 alter table sales_leads enable row level security;
+alter table partner_leads enable row level security;
 alter table stores enable row level security;
 alter table store_menus enable row level security;
 alter table consumer_recommendation_events enable row level security;
@@ -95,6 +114,12 @@ alter table consumer_recommendation_events enable row level security;
 do $$ begin
   create policy "anon can insert sales leads"
     on sales_leads for insert
+    with check (true);
+exception when duplicate_object then null; end $$;
+
+do $$ begin
+  create policy "anon can insert partner leads"
+    on partner_leads for insert
     with check (true);
 exception when duplicate_object then null; end $$;
 
