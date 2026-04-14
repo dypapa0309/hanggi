@@ -37,7 +37,7 @@
       }
 
       .wrap {
-        max-width: 540px;
+        max-width: 560px;
         margin: 0 auto;
         padding: 18px 18px 42px;
       }
@@ -89,7 +89,8 @@
       }
 
       h1,
-      h2 {
+      h2,
+      h3 {
         line-height: 1.28;
       }
 
@@ -100,9 +101,14 @@
       }
 
       h2 {
-        font-size: 28px;
+        font-size: 27px;
         font-weight: 900;
         margin-bottom: 12px;
+      }
+
+      h3 {
+        font-size: 18px;
+        font-weight: 900;
       }
 
       .lead {
@@ -111,22 +117,63 @@
         color: var(--muted);
       }
 
-      .info-list,
-      .point-list {
-        margin-top: 20px;
+      .summary-grid,
+      .point-list,
+      .comparison-list,
+      .check-list {
         display: grid;
         gap: 10px;
+        margin-top: 20px;
       }
 
-      .info-item,
-      .point-item {
+      .summary-card,
+      .point-item,
+      .comparison-item,
+      .check-item {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        border-radius: 20px;
+        padding: 16px;
+      }
+
+      .summary-card {
+        text-align: left;
+      }
+
+      .summary-card strong,
+      .comparison-item strong {
+        display: block;
+        font-size: 15px;
+        font-weight: 900;
+        margin-bottom: 6px;
+      }
+
+      .summary-card p,
+      .comparison-item p,
+      .point-copy,
+      .section-copy {
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .section-block {
+        margin-top: 20px;
+      }
+
+      .section-block + .section-block {
+        margin-top: 14px;
+      }
+
+      .section-block h3 {
+        margin-bottom: 10px;
+      }
+
+      .point-item,
+      .check-item {
         display: flex;
         gap: 12px;
         align-items: flex-start;
-        padding: 14px 15px;
-        border-radius: 18px;
-        border: 1px solid var(--line);
-        background: var(--surface);
       }
 
       .dot {
@@ -143,38 +190,12 @@
         font-weight: 900;
       }
 
-      .shot-shell {
-        margin-top: 24px;
-        background: linear-gradient(180deg, #fff4e8 0%, #fffdf9 100%);
-        border: 1px solid var(--line);
-        border-radius: 26px;
-        padding: 16px;
-      }
-
-      .shot-frame {
-        border-radius: 24px;
-        border: 1px solid rgba(76, 62, 49, 0.08);
+      .comparison-item {
         background: linear-gradient(180deg, #fffaf4 0%, #fff4e6 100%);
-        min-height: 330px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        position: relative;
       }
 
-      .shot-frame img {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
-
-      .shot-placeholder {
-        padding: 26px;
-        text-align: center;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.7;
+      .comparison-item.accent {
+        background: var(--surface-strong);
       }
 
       .price-card {
@@ -211,6 +232,7 @@
       }
 
       .price-note {
+        margin-top: 12px;
         padding: 16px;
         border-radius: 18px;
         background: var(--warning);
@@ -310,8 +332,7 @@
         letter-spacing: 0.04em;
       }
 
-      input,
-      textarea {
+      input {
         width: 100%;
         border-radius: 16px;
         border: 1px solid var(--line);
@@ -323,15 +344,9 @@
         outline: none;
       }
 
-      input:focus,
-      textarea:focus {
+      input:focus {
         border-color: var(--primary);
         background: var(--white);
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 160px;
       }
 
       .menu-stack {
@@ -376,7 +391,7 @@
         border: 1px solid var(--line);
         background: #fffaf4;
         padding: 18px;
-        max-height: 360px;
+        max-height: 320px;
         overflow-y: auto;
         font-size: 14px;
         line-height: 1.8;
@@ -384,7 +399,6 @@
       }
 
       .contract-box h3 {
-        font-size: 17px;
         margin-bottom: 12px;
       }
 
@@ -402,22 +416,6 @@
         margin-top: 12px;
         color: var(--muted);
         font-size: 12px;
-      }
-
-      .check-list {
-        margin-top: 18px;
-        display: grid;
-        gap: 10px;
-      }
-
-      .check-item {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-        padding: 14px 15px;
-        border-radius: 18px;
-        border: 1px solid var(--line);
-        background: var(--surface);
       }
 
       .check-item input[type='checkbox'] {
@@ -533,21 +531,93 @@
 
       @media (max-width: 420px) {
         .wrap {
-          padding-inline: 14px;
+          padding: 14px 14px 32px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 14px;
+        }
+
+        .progress-pill {
+          padding: 7px 10px;
         }
 
         .card,
         .success-card {
-          padding-inline: 18px;
+          border-radius: 24px;
+          padding: 22px 16px 18px;
+        }
+
+        .hero-card {
+          padding-top: 24px;
         }
 
         h1,
         h2 {
-          font-size: 26px;
+          font-size: 24px;
         }
 
-        .shot-frame {
-          min-height: 280px;
+        .lead {
+          font-size: 15px;
+          line-height: 1.6;
+        }
+
+        .summary-grid,
+        .point-list,
+        .comparison-list,
+        .check-list,
+        .price-card,
+        .field-grid {
+          gap: 8px;
+          margin-top: 16px;
+        }
+
+        .summary-card,
+        .point-item,
+        .comparison-item,
+        .check-item,
+        .price-box,
+        .choice-option,
+        .notice,
+        .contract-box {
+          border-radius: 18px;
+          padding: 14px;
+        }
+
+        .price-box strong {
+          font-size: 24px;
+        }
+
+        .choice-price {
+          font-size: 15px;
+        }
+
+        .menu-row {
+          flex-direction: column;
+        }
+
+        .ghost-icon-btn {
+          width: 100%;
+          min-width: 0;
+          padding: 12px 14px;
+        }
+
+        .nav {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .btn,
+        .btn-secondary {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .contract-box {
+          max-height: 260px;
         }
       }
     </style>
@@ -556,17 +626,25 @@
     <main class="wrap">
       <div class="topbar">
         <div class="brand-title">사장님 가입 안내</div>
-        <div class="progress-pill" id="progress-pill">1 / 10</div>
+        <div class="progress-pill" id="progress-pill">1 / 6</div>
       </div>
 
       <section class="slide active" data-slide="1">
         <div class="card hero-card">
           <h1>사장님 매장이 고객의<br />"오늘 뭐 먹지?" 순간에 들어갑니다.</h1>
-          <p class="lead">한끼비서는 고객이 메뉴를 정하는 순간을 줄여주고, 외식이 필요할 때 가까운 매장으로 자연스럽게 이어주는 앱이에요.</p>
-          <div class="shot-shell">
-            <div class="shot-frame">
-              <img src="merchant-assets/shot-01-intro.png" alt="한끼비서 온보딩 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
-              <div class="shot-placeholder">이 자리에 앱 첫 화면 스크린샷을 넣으면 됩니다.<br />사용자가 한끼비서를 처음 보는 장면을 보여주세요.</div>
+          <p class="lead">현장에서는 실제 앱 화면으로 흐름을 보여드리고, 이 페이지에서는 핵심 혜택과 가입 절차만 빠르게 안내해드릴게요.</p>
+          <div class="summary-grid">
+            <div class="summary-card">
+              <strong>메뉴를 찾는 순간 연결</strong>
+              <p>고객이 메뉴를 고르는 흐름 안에서 매장이 보이도록 설계되어 있어요.</p>
+            </div>
+            <div class="summary-card">
+              <strong>근처 고객 중심 노출</strong>
+              <p>위치와 메뉴 흐름을 기준으로 식사 가능성이 높은 근처 고객에게 연결됩니다.</p>
+            </div>
+            <div class="summary-card">
+              <strong>설정은 간단하게</strong>
+              <p>매장 정보와 대표 메뉴만 알려주시면 운영팀이 등록을 빠르게 도와드립니다.</p>
             </div>
           </div>
           <div class="nav">
@@ -577,12 +655,20 @@
 
       <section class="slide" data-slide="2">
         <div class="card">
-          <h2>고객은 지금 먹기 좋은 메뉴를 빠르게 추천받아요.</h2>
-          <p class="lead">날씨와 시간대, 최근 식사 흐름을 바탕으로 메뉴를 보여주기 때문에 메뉴를 찾는 순간에 사장님 매장이 들어갈 기회가 생깁니다.</p>
-          <div class="shot-shell">
-            <div class="shot-frame">
-              <img src="merchant-assets/shot-02-home.png" alt="한끼비서 추천 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
-              <div class="shot-placeholder">추천 화면 스크린샷을 여기에 교체해 넣어주세요.</div>
+          <h2>한끼비서는 메뉴를 찾는 흐름 안에서 매장을 보여드려요.</h2>
+          <p class="lead">광고를 따로 세팅해서 노출을 사는 방식보다, 고객이 실제로 식사를 고민하는 순간에 자연스럽게 연결되는 흐름에 집중합니다.</p>
+          <div class="point-list">
+            <div class="point-item">
+              <span class="dot">1</span>
+              <div class="point-copy">고객이 오늘 먹을 메뉴를 정하는 순간 사장님 매장이 후보로 들어갈 수 있어요.</div>
+            </div>
+            <div class="point-item">
+              <span class="dot">2</span>
+              <div class="point-copy">밖에서 먹는 흐름으로 넘어오면 근처 매장 연결 가능성이 더 높아집니다.</div>
+            </div>
+            <div class="point-item">
+              <span class="dot">3</span>
+              <div class="point-copy">초기 등록 매장은 운영팀이 정보 확인 후 빠르게 노출 준비를 도와드립니다.</div>
             </div>
           </div>
           <div class="nav">
@@ -594,12 +680,24 @@
 
       <section class="slide" data-slide="3">
         <div class="card">
-          <h2>밖에서 먹을래요를 누르는 순간, 근처 매장 추천으로 이어집니다.</h2>
-          <p class="lead">메뉴를 고른 고객이 바로 근처 매장을 찾는 흐름이라, 식사 의사가 높은 손님에게 연결될 수 있어요.</p>
-          <div class="shot-shell">
-            <div class="shot-frame">
-              <img src="merchant-assets/shot-03-choice.png" alt="집에서 준비할래요 밖에서 먹을래요 선택 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
-              <div class="shot-placeholder">집/밖 선택 화면 스크린샷을 여기에 넣어주세요.</div>
+          <h2>기존 홍보비보다 부담 낮게, 가볍게 시작할 수 있어요.</h2>
+          <p class="lead">배달앱 광고만이 아니라 플레이스, 블로그, 체험단처럼 사장님이 익숙하게 쓰는 홍보비와 비교했을 때도 시작 부담을 낮춘 구조예요.</p>
+          <div class="comparison-list">
+            <div class="comparison-item">
+              <strong>배달앱 광고</strong>
+              <p>고정 광고비나 수수료 구조를 계속 신경써야 하는 경우가 많아요.</p>
+            </div>
+            <div class="comparison-item">
+              <strong>네이버 플레이스 · 검색 홍보</strong>
+              <p>노출 관리를 꾸준히 해야 하고 추가 홍보비가 이어지기 쉬워요.</p>
+            </div>
+            <div class="comparison-item">
+              <strong>블로그 대행 · 체험단 · 인스타 홍보</strong>
+              <p>콘텐츠를 계속 돌려야 해서 월별 예산이 따로 나가기 쉬워요.</p>
+            </div>
+            <div class="comparison-item accent">
+              <strong>한끼비서</strong>
+              <p>매달 광고비를 계속 태우는 방식보다, 메뉴를 찾는 고객 흐름 안에서 매장 연결에 집중합니다.</p>
             </div>
           </div>
           <div class="nav">
@@ -611,12 +709,58 @@
 
       <section class="slide" data-slide="4">
         <div class="card">
-          <h2>고객 위치 기준 가까운 매장을 먼저 보여줘요.</h2>
-          <p class="lead">고객이 실제로 있는 위치를 기준으로 가까운 매장을 우선 찾아주기 때문에, 근처에서 바로 유입될 가능성이 높아집니다.</p>
-          <div class="shot-shell">
-            <div class="shot-frame">
-              <img src="merchant-assets/shot-04-location.png" alt="외식 추천 기준 위치 화면" onerror="this.style.display='none'; this.parentElement.querySelector('.shot-placeholder').style.display='block';" />
-              <div class="shot-placeholder">위치 기준 추천 또는 위치 설정 화면을 여기에 넣어주세요.</div>
+          <h2>현재 가격 정책으로 먼저 부담 없이 시작해보세요.</h2>
+          <div class="price-card">
+            <div class="price-box">
+              <strong>대표 메뉴 1개당 월 4,900원</strong>
+              <span>대표 메뉴 1개 기준으로 시작하고, 추가 메뉴가 있으면 그만큼만 더해집니다.</span>
+            </div>
+            <div class="price-box">
+              <strong class="strikethrough">월 14,900원</strong>
+              <span>배달앱 광고나 플레이스 홍보, 블로그 체험단처럼 매달 별도 예산을 계속 쓰는 방식보다 부담을 낮췄어요.</span>
+            </div>
+          </div>
+          <div class="price-note">
+            한끼비서는 광고비를 계속 태워 노출을 사는 방식보다,<br />
+            메뉴를 찾는 고객 흐름 안에서 사장님 매장을 보여주는 데 집중합니다.
+          </div>
+          <div class="section-block">
+            <h3>계약 기간을 선택해주세요.</h3>
+            <div class="choice-grid">
+              <label class="choice-option">
+                <input type="radio" name="contract_term" value="monthly" checked />
+                <span class="choice-copy">
+                  <span class="choice-title">매월 결제</span>
+                  <span class="choice-price-line">
+                    <span class="choice-price" id="monthly-price-display">월 4,900원</span>
+                  </span>
+                  <span class="choice-note"><strong id="menu-count-display">1개 메뉴</strong> 기준으로 계산돼요.</span>
+                </span>
+              </label>
+              <label class="choice-option">
+                <input type="radio" name="contract_term" value="yearly" />
+                <span class="choice-copy">
+                  <span class="choice-title">1년 결제</span>
+                  <span class="choice-price-line">
+                    <span class="choice-price" id="yearly-final-price">55,860원</span>
+                    <span class="choice-original" id="yearly-original-price">58,800원</span>
+                    <span class="choice-discount">5% 할인</span>
+                  </span>
+                  <span class="choice-note"><strong id="yearly-note-count">1개 메뉴</strong> 기준 12개월 총액에서 할인돼요.</span>
+                </span>
+              </label>
+              <label class="choice-option">
+                <input type="radio" name="contract_term" value="two_years" />
+                <span class="choice-copy">
+                  <span class="choice-title">2년 결제</span>
+                  <span class="choice-price-line">
+                    <span class="choice-price" id="two-years-final-price">105,840원</span>
+                    <span class="choice-original" id="two-years-original-price">117,600원</span>
+                    <span class="choice-discount">10% 할인</span>
+                  </span>
+                  <span class="choice-note"><strong id="two-years-note-count">1개 메뉴</strong> 기준 24개월 총액에서 할인돼요.</span>
+                </span>
+              </label>
             </div>
           </div>
           <div class="nav">
@@ -628,55 +772,8 @@
 
       <section class="slide" data-slide="5">
         <div class="card">
-          <h2>메뉴를 찾는 순간 노출되고, 근처 고객에게 먼저 보여집니다.</h2>
-          <div class="point-list">
-            <div class="point-item">
-              <span class="dot">1</span>
-              <div>고객이 메뉴를 결정하는 순간에 사장님 매장을 연결할 수 있어요.</div>
-            </div>
-            <div class="point-item">
-              <span class="dot">2</span>
-              <div>위치 기준으로 가까운 고객에게 먼저 보이도록 설계되어 있어요.</div>
-            </div>
-            <div class="point-item">
-              <span class="dot">3</span>
-              <div>초기 등록만 하면 운영팀이 빠르게 매장 노출을 도와드립니다.</div>
-            </div>
-          </div>
-          <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(4)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="goToSlide(6)">다음</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide" data-slide="6">
-        <div class="card">
-          <h2>초기 프로모션가로 먼저 부담 없이 시작해보세요.</h2>
-          <div class="price-card">
-            <div class="price-box">
-              <strong>대표 메뉴 1개당 월 4,900원</strong>
-              <span>대표 메뉴 1개를 기준으로 추가 메뉴마다 같은 금액이 더해집니다.</span>
-            </div>
-            <div class="price-box">
-              <strong class="strikethrough">월 14,900원</strong>
-              <span>현재는 초기 앱 런칭 프로모션으로 더 낮은 가격을 적용하고 있어요.</span>
-            </div>
-          </div>
-          <div class="price-note">
-            배민 깃발 광고비와 비교해도 훨씬 낮은 비용으로 시작할 수 있어요.<br />
-            아직 초기 앱 런칭 단계라 사장님이 부담 없이 먼저 써보실 수 있도록 낮은 가격으로 운영하고 있어요.
-          </div>
-          <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(5)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="goToSlide(7)">다음</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide" data-slide="7">
-        <div class="card">
-          <h2>먼저 매장 기본 정보를 알려주세요.</h2>
+          <h2>매장 정보와 대표 메뉴를 알려주세요.</h2>
+          <p class="lead">여기까지 입력해주시면 운영팀이 등록 검토와 연락을 빠르게 이어갈 수 있어요.</p>
           <div class="field-grid">
             <div class="field">
               <label for="store_name">매장명 *</label>
@@ -699,58 +796,6 @@
               <input id="sales_owner" type="text" placeholder="예: 홍길동 / 서울동부팀 / 파트너 코드" />
             </div>
             <div class="field">
-              <label>계약 기간 *</label>
-              <div class="choice-grid">
-                <label class="choice-option">
-                  <input type="radio" name="contract_term" value="monthly" checked />
-                  <span class="choice-copy">
-                    <span class="choice-title">매월 결제</span>
-                    <span class="choice-price-line">
-                      <span class="choice-price" id="monthly-price-display">월 4,900원</span>
-                    </span>
-                    <span class="choice-note"><strong id="menu-count-display">1개 메뉴</strong> 기준으로 계산돼요.</span>
-                  </span>
-                </label>
-                <label class="choice-option">
-                  <input type="radio" name="contract_term" value="yearly" />
-                  <span class="choice-copy">
-                    <span class="choice-title">1년 결제</span>
-                    <span class="choice-price-line">
-                      <span class="choice-price" id="yearly-final-price">55,860원</span>
-                      <span class="choice-original" id="yearly-original-price">58,800원</span>
-                      <span class="choice-discount">5% 할인</span>
-                    </span>
-                    <span class="choice-note"><strong id="yearly-note-count">1개 메뉴</strong> 기준 12개월 총액에서 할인돼요.</span>
-                  </span>
-                </label>
-                <label class="choice-option">
-                  <input type="radio" name="contract_term" value="two_years" />
-                  <span class="choice-copy">
-                    <span class="choice-title">2년 결제</span>
-                    <span class="choice-price-line">
-                      <span class="choice-price" id="two-years-final-price">105,840원</span>
-                      <span class="choice-original" id="two-years-original-price">117,600원</span>
-                      <span class="choice-discount">10% 할인</span>
-                    </span>
-                    <span class="choice-note"><strong id="two-years-note-count">1개 메뉴</strong> 기준 24개월 총액에서 할인돼요.</span>
-                  </span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div id="error-basic" class="error-msg"></div>
-          <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(6)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="validateBasicInfo()">다음</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide" data-slide="8">
-        <div class="card">
-          <h2>대표 메뉴와 추가 메뉴를 알려주세요.</h2>
-          <div class="field-grid">
-            <div class="field">
               <label for="main_menu">대표 메뉴 *</label>
               <input id="main_menu" type="text" placeholder="예: 칼국수" />
             </div>
@@ -765,18 +810,18 @@
               <button class="small-add-btn" type="button" onclick="addExtraMenu()">+ 추가 메뉴 입력칸 만들기</button>
             </div>
           </div>
-          <div id="error-menu" class="error-msg"></div>
+          <div id="error-details" class="error-msg"></div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(7)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="validateMenus()">다음</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(4)">이전</button>
+            <button class="btn btn-primary" type="button" onclick="validateStoreDetails()">다음</button>
           </div>
         </div>
       </section>
 
-      <section class="slide" data-slide="9" id="contract-view">
+      <section class="slide" data-slide="6" id="contract-view">
         <div class="card">
-          <h2>계약 내용을 확인해주세요.</h2>
-          <p class="lead">실제 제출 전에 아래 내용을 확인하신 뒤 동의 여부를 선택하게 됩니다.</p>
+          <h2>계약 내용을 확인하고 전송해주세요.</h2>
+          <p class="lead">실제 제출 전에 아래 계약 내용과 요금을 확인한 뒤 동의 여부를 선택해주세요.</p>
           <div class="contract-box" id="contract-text">
             <h3>한끼비서 사장님 가입 계약서</h3>
             <p>본 계약은 한끼비서 사장님 가입 및 매장 노출 서비스 이용에 관한 기본 사항을 정하기 위한 문서입니다.</p>
@@ -789,24 +834,14 @@
             <p><strong>제7조 (개인정보 및 연락)</strong><br />입력한 휴대폰 번호와 매장 정보는 파트너 등록 검토, 계약 안내, 운영 연락을 위해 사용됩니다.</p>
           </div>
           <div class="contract-meta">계약 버전: <span id="contract-version">2026-04-09-v1</span></div>
-          <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(8)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="goToSlide(10)">다음</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide" data-slide="10">
-        <div class="card">
-          <h2>마지막으로 동의 후 전송해주세요.</h2>
           <div class="check-list">
             <label class="check-item">
               <input id="agree_contract" type="checkbox" />
-              <span>계약 내용을 확인했고 동의합니다.</span>
+              <span class="section-copy">계약 내용을 확인했고 동의합니다.</span>
             </label>
             <label class="check-item">
               <input id="agree_sms" type="checkbox" />
-              <span>입력한 번호로 계약 내용을 문자 앱으로 보내는 데 동의합니다.</span>
+              <span class="section-copy">입력한 번호로 계약 내용을 문자 앱으로 보내는 데 동의합니다.</span>
             </label>
           </div>
           <div class="notice">
@@ -814,7 +849,7 @@
           </div>
           <div id="error-submit" class="error-msg"></div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(9)">이전</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(5)">이전</button>
             <button class="btn btn-primary" id="submit-btn" type="button" onclick="handleSubmit()">전송하기</button>
           </div>
         </div>
@@ -833,7 +868,7 @@
       const SUPABASE_URL = 'https://bfdesyathuzrbagemhoe.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmZGVzeWF0aHV6cmJhZ2VtaG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDQ4MDEsImV4cCI6MjA5MTIyMDgwMX0.DUY-bvmCT-jRwLlRO2aCXeV3uDjG7-bCiCHRCfUmd3Q';
       const CONTRACT_VERSION = '2026-04-09-v1';
-      const TOTAL_SLIDES = 10;
+      const TOTAL_SLIDES = 6;
       const BASE_MENU_PRICE = 4900;
       const YEARLY_DISCOUNT_RATE = 0.05;
       const TWO_YEAR_DISCOUNT_RATE = 0.1;
@@ -1036,35 +1071,26 @@
         updatePricingUI();
       }
 
-      function validateBasicInfo() {
+      function validateStoreDetails() {
         clearErrors();
         const storeName = document.getElementById('store_name').value.trim();
         const ownerName = document.getElementById('owner_name').value.trim();
         const phone = sanitizePhone(document.getElementById('phone').value.trim());
         const address = document.getElementById('address').value.trim();
+        const mainMenu = document.getElementById('main_menu').value.trim();
 
-        if (!storeName || !ownerName || !phone || !address) {
-          showError('error-basic', '필수 항목을 모두 입력해주세요.');
+        if (!storeName || !ownerName || !phone || !address || !mainMenu) {
+          showError('error-details', '필수 항목을 모두 입력해주세요.');
           return;
         }
 
         if (phone.length < 10) {
-          showError('error-basic', '휴대폰 번호를 정확히 입력해주세요.');
+          showError('error-details', '휴대폰 번호를 정확히 입력해주세요.');
           return;
         }
 
         document.getElementById('phone').value = formatPhoneDisplay(phone);
-        goToSlide(8);
-      }
-
-      function validateMenus() {
-        clearErrors();
-        const mainMenu = document.getElementById('main_menu').value.trim();
-        if (!mainMenu) {
-          showError('error-menu', '대표 메뉴를 입력해주세요.');
-          return;
-        }
-        goToSlide(9);
+        goToSlide(6);
       }
 
       function buildContractSummary(formData) {
@@ -1201,7 +1227,7 @@
           {
             owner_name: formData.owner_name,
             phone: formData.phone,
-            source: 'merchant_slides_v1',
+            source: 'merchant_slides_v2',
             store_name: formData.store_name,
             address: formData.address,
             sales_owner: formData.sales_owner,
@@ -1251,7 +1277,7 @@
         document.querySelectorAll('.slide').forEach((slide) => {
           slide.classList.remove('active');
         });
-        goToSlide(9);
+        goToSlide(6);
       }
 
       function initSalesOwnerPrefill() {
