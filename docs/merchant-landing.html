@@ -170,7 +170,7 @@
       .hero-growth-top {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
         gap: 12px;
       }
 
@@ -184,8 +184,8 @@
       .hero-growth-badge {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 7px 11px;
+        gap: 10px;
+        padding: 8px 12px;
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.78);
         border: 1px solid rgba(76, 62, 49, 0.08);
@@ -204,19 +204,12 @@
         animation: livePulse 1.4s ease-in-out infinite;
       }
 
-      .hero-growth-kicker {
-        font-size: 12px;
-        font-weight: 800;
-        color: var(--muted);
-        letter-spacing: 0.04em;
-      }
-
-      .hero-growth-live-value {
-        font-size: 30px;
+      .hero-growth-badge-number {
+        font-size: 20px;
         font-weight: 900;
         line-height: 1;
         color: #ff7a00;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.04em;
       }
 
       .hero-growth-headline {
@@ -908,12 +901,17 @@
           gap: 6px;
         }
 
-        .hero-growth h3 {
-          font-size: 20px;
+        .hero-growth-badge {
+          width: 100%;
+          justify-content: space-between;
         }
 
-        .hero-growth-live-value {
-          font-size: 26px;
+        .hero-growth-badge-number {
+          font-size: 18px;
+        }
+
+        .hero-growth h3 {
+          font-size: 20px;
         }
 
         .hero-growth-headline {
@@ -990,10 +988,11 @@
           <div class="hero-growth">
             <div class="hero-growth-top">
               <div class="hero-growth-live">
-                <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
-                <span class="hero-growth-live-value" id="live-active-users">52명</span>
+                <span class="hero-growth-badge">
+                  <span>실시간 앱 사용자 추이</span>
+                  <span class="hero-growth-badge-number" id="live-active-users">52명</span>
+                </span>
               </div>
-              <span class="hero-growth-kicker">2026년 4월 15일 기준 최근 3주</span>
             </div>
             <div class="hero-growth-headline">
               <div class="hero-growth-label">한끼비서 이번 주 사용자</div>
@@ -1642,12 +1641,21 @@
 
         render();
 
-        window.setInterval(() => {
-          const change = Math.random() > 0.5 ? 1 : -1;
-          currentValue = Math.max(45, Math.min(60, currentValue + change));
-          storeLiveActiveUser(currentValue);
-          render();
-        }, 3200);
+        const scheduleNextTick = () => {
+          const nextDelay = Math.floor(Math.random() * 2701) + 300;
+          window.setTimeout(() => {
+            const magnitude = Math.floor(Math.random() * 4) + 1;
+            const direction = Math.random() > 0.5 ? 1 : -1;
+            const change = magnitude * direction;
+
+            currentValue = Math.max(45, Math.min(60, currentValue + change));
+            storeLiveActiveUser(currentValue);
+            render();
+            scheduleNextTick();
+          }, nextDelay);
+        };
+
+        scheduleNextTick();
       }
 
       function addExtraMenu(value = '') {
