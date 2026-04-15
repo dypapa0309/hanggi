@@ -157,6 +157,143 @@
         color: var(--muted);
       }
 
+      .hero-growth {
+        margin-top: 20px;
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 18px;
+        background: linear-gradient(180deg, #fffaf4 0%, #fff2df 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+
+      .hero-growth-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .hero-growth-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(76, 62, 49, 0.08);
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--deep);
+      }
+
+      .hero-growth-badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff7a00;
+        box-shadow: 0 0 0 6px rgba(255, 122, 0, 0.12);
+      }
+
+      .hero-growth-kicker {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+
+      .hero-growth h3 {
+        margin-top: 12px;
+        font-size: 22px;
+      }
+
+      .hero-growth h3 strong {
+        color: #ff7a00;
+      }
+
+      .hero-growth-copy {
+        margin-top: 8px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .hero-chart {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        align-items: end;
+      }
+
+      .hero-bar {
+        display: grid;
+        gap: 10px;
+        align-items: end;
+      }
+
+      .hero-bar-track {
+        height: 188px;
+        border-radius: 18px;
+        padding: 10px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 249, 241, 0.92) 100%),
+          repeating-linear-gradient(
+            to top,
+            rgba(236, 220, 207, 0.9) 0,
+            rgba(236, 220, 207, 0.9) 1px,
+            transparent 1px,
+            transparent 46px
+          );
+        border: 1px solid rgba(76, 62, 49, 0.08);
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .hero-bar-fill {
+        width: 100%;
+        border-radius: 14px;
+        padding: 12px 8px 10px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 900;
+        color: var(--white);
+        background: linear-gradient(180deg, #ffbd63 0%, #ff8c2a 100%);
+        box-shadow: 0 10px 18px rgba(255, 140, 42, 0.22);
+      }
+
+      .hero-bar-fill.is-current {
+        background: linear-gradient(180deg, #ff9d3b 0%, #ff6b00 100%);
+        box-shadow: 0 14px 24px rgba(255, 107, 0, 0.28);
+      }
+
+      .hero-bar-meta {
+        display: grid;
+        gap: 3px;
+        text-align: center;
+      }
+
+      .hero-bar-label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+      }
+
+      .hero-bar-date {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .hero-bar-delta {
+        font-size: 11px;
+        font-weight: 800;
+        color: #ff7a00;
+      }
+
       .section-block {
         margin-top: 20px;
       }
@@ -402,6 +539,49 @@
         margin-bottom: 12px;
       }
 
+      .contract-summary {
+        margin-top: 18px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .contract-summary-card {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 16px;
+      }
+
+      .contract-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .contract-summary-item {
+        border-radius: 16px;
+        background: var(--white);
+        border: 1px solid rgba(76, 62, 49, 0.08);
+        padding: 12px;
+      }
+
+      .contract-summary-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        margin-bottom: 6px;
+      }
+
+      .contract-summary-value {
+        font-size: 15px;
+        font-weight: 900;
+        color: var(--deep);
+        line-height: 1.5;
+      }
+
       .contract-box p + p,
       .contract-box p + ul,
       .contract-box ul + p {
@@ -618,6 +798,7 @@
         .check-item,
         .price-box,
         .choice-option,
+        .contract-summary-card,
         .success-meta-card,
         .notice,
         .contract-box {
@@ -625,8 +806,50 @@
           padding: 14px;
         }
 
+        .contract-summary-grid {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .contract-summary-item {
+          border-radius: 14px;
+          padding: 10px 12px;
+        }
+
         .price-box strong {
           font-size: 24px;
+        }
+
+        .hero-growth {
+          margin-top: 16px;
+          border-radius: 20px;
+          padding: 16px 14px;
+        }
+
+        .hero-growth-top {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .hero-growth h3 {
+          font-size: 20px;
+        }
+
+        .hero-chart {
+          gap: 8px;
+        }
+
+        .hero-bar-track {
+          height: 160px;
+          border-radius: 16px;
+          padding: 8px;
+        }
+
+        .hero-bar-fill {
+          border-radius: 12px;
+          font-size: 12px;
+          padding: 10px 6px 8px;
         }
 
         .choice-price {
@@ -671,6 +894,45 @@
         <div class="card hero-card">
           <h1>사장님 매장이 고객의<br />"오늘 뭐 먹지?" 순간에 들어갑니다.</h1>
           <p class="lead">현장에서는 실제 앱 화면으로 흐름을 보여드리고, 이 페이지에서는 핵심 혜택과 가입 절차만 빠르게 안내해드릴게요.</p>
+          <div class="hero-growth">
+            <div class="hero-growth-top">
+              <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
+              <span class="hero-growth-kicker">2026년 4월 15일 기준 최근 3주</span>
+            </div>
+            <h3>이번 주 사용자는 <strong>1,043명</strong>까지 올라왔어요.</h3>
+            <p class="hero-growth-copy">초기 유입이 빠르게 커지는 구간이라, 먼저 등록한 매장이 노출 기회를 선점하기 좋은 타이밍입니다.</p>
+            <div class="hero-chart" aria-label="최근 3주 앱 사용자 수 그래프">
+              <div class="hero-bar">
+                <div class="hero-bar-track">
+                  <div class="hero-bar-fill" style="height: 8%;">41명</div>
+                </div>
+                <div class="hero-bar-meta">
+                  <span class="hero-bar-label">3월 30일 주</span>
+                  <span class="hero-bar-date">2026-03-30</span>
+                </div>
+              </div>
+              <div class="hero-bar">
+                <div class="hero-bar-track">
+                  <div class="hero-bar-fill" style="height: 33%;">342명</div>
+                </div>
+                <div class="hero-bar-meta">
+                  <span class="hero-bar-label">4월 6일 주</span>
+                  <span class="hero-bar-date">2026-04-06</span>
+                  <span class="hero-bar-delta">+301명</span>
+                </div>
+              </div>
+              <div class="hero-bar">
+                <div class="hero-bar-track">
+                  <div class="hero-bar-fill is-current" style="height: 100%;">1,043명</div>
+                </div>
+                <div class="hero-bar-meta">
+                  <span class="hero-bar-label">4월 13일 주</span>
+                  <span class="hero-bar-date">2026-04-13</span>
+                  <span class="hero-bar-delta">+701명</span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="summary-grid">
             <div class="summary-card">
               <strong>메뉴를 찾는 순간 연결</strong>
@@ -860,6 +1122,29 @@
         <div class="card">
           <h2>계약 내용을 확인하고 전송해주세요.</h2>
           <p class="lead">실제 제출 전에 아래 계약 내용과 요금을 확인한 뒤 동의 여부를 선택해주세요.</p>
+          <div class="contract-summary">
+            <div class="contract-summary-card">
+              <h3>선택한 계약 요약</h3>
+              <div class="contract-summary-grid">
+                <div class="contract-summary-item">
+                  <span class="contract-summary-label">계약 기간</span>
+                  <div class="contract-summary-value" id="contract-summary-term">매월 결제</div>
+                </div>
+                <div class="contract-summary-item">
+                  <span class="contract-summary-label">총 메뉴 수</span>
+                  <div class="contract-summary-value" id="contract-summary-menu-count">1개 메뉴</div>
+                </div>
+                <div class="contract-summary-item">
+                  <span class="contract-summary-label">월 요금</span>
+                  <div class="contract-summary-value" id="contract-summary-monthly-price">4,900원</div>
+                </div>
+                <div class="contract-summary-item">
+                  <span class="contract-summary-label">기간 총액</span>
+                  <div class="contract-summary-value" id="contract-summary-total-price">매월 결제 4,900원</div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="contract-box" id="contract-text">
             <h3>한끼비서 사장님 가입 계약서</h3>
             <p>본 계약은 한끼비서 사장님 가입 및 매장 노출 서비스 이용에 관한 기본 사항을 정하기 위한 문서입니다.</p>
@@ -1060,6 +1345,30 @@
         return `매월 결제 ${formatWon(pricing.monthlyPrice)}`;
       }
 
+      function updateContractSummaryUI(contractTerm = getContractTerm(), pricing = getPricing()) {
+        const menuCountLabel = `${pricing.menuCount}개 메뉴`;
+
+        const contractSummaryTermEl = document.getElementById('contract-summary-term');
+        if (contractSummaryTermEl) {
+          contractSummaryTermEl.textContent = getContractTermLabel(contractTerm);
+        }
+
+        const contractSummaryMenuCountEl = document.getElementById('contract-summary-menu-count');
+        if (contractSummaryMenuCountEl) {
+          contractSummaryMenuCountEl.textContent = menuCountLabel;
+        }
+
+        const contractSummaryMonthlyEl = document.getElementById('contract-summary-monthly-price');
+        if (contractSummaryMonthlyEl) {
+          contractSummaryMonthlyEl.textContent = formatWon(pricing.monthlyPrice);
+        }
+
+        const contractSummaryTotalEl = document.getElementById('contract-summary-total-price');
+        if (contractSummaryTotalEl) {
+          contractSummaryTotalEl.textContent = formatTermPriceSummary(contractTerm, pricing);
+        }
+      }
+
       function updatePricingUI() {
         const pricing = getPricing();
         const menuCountLabel = `${pricing.menuCount}개 메뉴`;
@@ -1096,6 +1405,88 @@
 
         const contractTermEl = document.getElementById('contract-term-price');
         if (contractTermEl) contractTermEl.textContent = formatTermPriceSummary(getContractTerm(), pricing);
+
+        updateContractSummaryUI(getContractTerm(), pricing);
+      }
+
+      function buildContractViewUrl(formData, pricing) {
+        const params = new URLSearchParams({
+          view: 'contract',
+          contract_term: formData.contract_term,
+          menu_count: String(pricing.menuCount),
+          monthly_price: String(pricing.monthlyPrice),
+          term_final_price: String(pricing.termFinalPrice),
+          term_original_price: String(pricing.termOriginalPrice),
+          term_discount_rate: String(pricing.termDiscountRate),
+        });
+
+        return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+      }
+
+      function parsePositiveNumber(value) {
+        if (value === null || value === '') return null;
+        const parsed = Number(value);
+        if (!Number.isFinite(parsed) || parsed < 0) return null;
+        return parsed;
+      }
+
+      function getContractViewStateFromParams(params) {
+        const contractTerm = params.get('contract_term');
+        const allowedTerms = new Set(['monthly', 'yearly', 'two_years']);
+        if (!allowedTerms.has(contractTerm)) return null;
+
+        const menuCount = parsePositiveNumber(params.get('menu_count'));
+        const monthlyPrice = parsePositiveNumber(params.get('monthly_price'));
+        const termFinalPrice = parsePositiveNumber(params.get('term_final_price'));
+        const termOriginalPrice = parsePositiveNumber(params.get('term_original_price'));
+        const termDiscountRate = parsePositiveNumber(params.get('term_discount_rate'));
+
+        if (
+          menuCount === null ||
+          monthlyPrice === null ||
+          termFinalPrice === null ||
+          termOriginalPrice === null ||
+          termDiscountRate === null
+        ) {
+          return null;
+        }
+
+        return {
+          contractTerm,
+          pricing: {
+            menuCount: Math.max(1, Math.round(menuCount)),
+            monthlyPrice: Math.round(monthlyPrice),
+            termFinalPrice: Math.round(termFinalPrice),
+            termOriginalPrice: Math.round(termOriginalPrice),
+            termDiscountRate,
+          },
+        };
+      }
+
+      function applyContractViewState(viewState) {
+        const { contractTerm, pricing } = viewState;
+        const radio = document.querySelector(`input[name="contract_term"][value="${contractTerm}"]`);
+        if (radio) {
+          radio.checked = true;
+        }
+
+        const menuCountLabel = `${pricing.menuCount}개 메뉴`;
+        const contractMenuCountEl = document.getElementById('contract-menu-count');
+        if (contractMenuCountEl) {
+          contractMenuCountEl.textContent = menuCountLabel;
+        }
+
+        const contractMonthlyEl = document.getElementById('contract-monthly-price');
+        if (contractMonthlyEl) {
+          contractMonthlyEl.textContent = formatWon(pricing.monthlyPrice);
+        }
+
+        const contractTermEl = document.getElementById('contract-term-price');
+        if (contractTermEl) {
+          contractTermEl.textContent = formatTermPriceSummary(contractTerm, pricing);
+        }
+
+        updateContractSummaryUI(contractTerm, pricing);
       }
 
       function addExtraMenu(value = '') {
@@ -1162,7 +1553,7 @@
           `할인 적용 전 총액: ${formatWon(pricing.termOriginalPrice)}`,
           `할인율: ${Math.round(pricing.termDiscountRate * 100)}%`,
           `계약 버전: ${CONTRACT_VERSION}`,
-          `계약 확인: ${window.location.origin}${window.location.pathname}?view=contract`,
+          `계약 확인: ${buildContractViewUrl(formData, pricing)}`,
         ].join('\n');
       }
 
@@ -1367,6 +1758,13 @@
         const params = new URLSearchParams(window.location.search);
         if (params.get('view') !== 'contract') {
           return;
+        }
+
+        const viewState = getContractViewStateFromParams(params);
+        if (viewState) {
+          applyContractViewState(viewState);
+        } else {
+          updatePricingUI();
         }
 
         document.querySelectorAll('.slide').forEach((slide) => {
