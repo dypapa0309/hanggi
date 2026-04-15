@@ -1324,8 +1324,8 @@
       const { createClient } = supabase;
       const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      const LIVE_ACTIVE_USER_STORAGE_KEY = 'hanggi_live_active_users_v1';
-      const LIVE_ACTIVE_USER_TS_KEY = 'hanggi_live_active_users_updated_at_v1';
+      const LIVE_ACTIVE_USER_STORAGE_KEY = 'hanggi_live_active_users_v2';
+      const LIVE_ACTIVE_USER_TS_KEY = 'hanggi_live_active_users_updated_at_v2';
 
       let currentSlide = 1;
       let lastSmsPhone = '';
@@ -1606,24 +1606,94 @@
         updateContractSummaryUI(contractTerm, pricing);
       }
 
-      function getStoredLiveActiveUser() {
+      function getKoreaTimeParts(date = new Date()) {
+        const formatter = new Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Asia/Seoul',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        });
+        const parts = formatter.formatToParts(date);
+        const hour = Number(parts.find((part) => part.type === 'hour')?.value || '0');
+        const minute = Number(parts.find((part) => part.type === 'minute')?.value || '0');
+        return { hour, minute, totalMinutes: hour * 60 + minute };
+      }
+
+      function getLiveActiveProfile(totalMinutes) {
+        if (totalMinutes < 360) {
+          return { min: 5, max: 20, anchor: 12, stepMax: 4 };
+        }
+        if (totalMinutes < 660) {
+          return { min: 30, max: 90, anchor: 58, stepMax: 8 };
+        }
+        if (totalMinutes < 840) {
+          const progress = (totalMinutes - 660) / 180;
+          const intensity = Math.sin(progress * Math.PI);
+          return {
+            min: 160,
+            max: 250,
+            anchor: Math.round(185 + intensity * 40),
+            stepMax: 14,
+          };
+        }
+        if (totalMinutes < 1020) {
+          return { min: 40, max: 110, anchor: 72, stepMax: 9 };
+        }
+        if (totalMinutes < 1260) {
+          const progress = (totalMinutes - 1020) / 240;
+          const intensity = Math.sin(progress * Math.PI);
+          return {
+            min: 180,
+            max: 320,
+            anchor: Math.round(225 + intensity * 55),
+            stepMax: 16,
+          };
+        }
+        return { min: 20, max: 70, anchor: 42, stepMax: 7 };
+      }
+
+      function clampLiveActiveValue(value, profile) {
+        return Math.max(profile.min, Math.min(profile.max, Math.round(value)));
+      }
+
+      function getStoredLiveActiveSnapshot(profile) {
         try {
-          const storedValue = window.localStorage.getItem(LIVE_ACTIVE_USER_STORAGE_KEY);
-          const parsed = Number(storedValue);
-          if (!Number.isFinite(parsed)) return 52;
-          return Math.max(45, Math.min(60, Math.round(parsed)));
+          const storedValue = Number(window.localStorage.getItem(LIVE_ACTIVE_USER_STORAGE_KEY));
+          const storedTs = Number(window.localStorage.getItem(LIVE_ACTIVE_USER_TS_KEY));
+          if (!Number.isFinite(storedValue)) {
+            return { value: profile.anchor, timestamp: Date.now() };
+          }
+
+          const elapsedMs = Number.isFinite(storedTs) ? Math.max(0, Date.now() - storedTs) : 0;
+          const catchUpRatio = Math.min(0.85, elapsedMs / (1000 * 60 * 20));
+          const blended = storedValue + (profile.anchor - storedValue) * catchUpRatio;
+
+          return {
+            value: clampLiveActiveValue(blended, profile),
+            timestamp: Number.isFinite(storedTs) ? storedTs : Date.now(),
+          };
         } catch (error) {
-          return 52;
+          return { value: profile.anchor, timestamp: Date.now() };
         }
       }
 
       function storeLiveActiveUser(value) {
         try {
-          window.localStorage.setItem(LIVE_ACTIVE_USER_STORAGE_KEY, String(value));
+          window.localStorage.setItem(LIVE_ACTIVE_USER_STORAGE_KEY, String(Math.round(value)));
           window.localStorage.setItem(LIVE_ACTIVE_USER_TS_KEY, String(Date.now()));
         } catch (error) {
           console.error(error);
         }
+      }
+
+      function getNextLiveActiveValue(currentValue, profile) {
+        const drift = profile.anchor - currentValue;
+        const driftStep = drift === 0 ? 0 : Math.sign(drift) * Math.min(Math.abs(drift), Math.max(2, Math.ceil(Math.abs(drift) * 0.22)));
+        const wobbleLimit = Math.max(1, Math.floor(profile.stepMax / 3));
+        const wobble = Math.floor(Math.random() * (wobbleLimit * 2 + 1)) - wobbleLimit;
+        const rawNextValue = currentValue + driftStep + wobble;
+
+        return clampLiveActiveValue(rawNextValue, profile);
       }
 
       function initLiveUserTrend() {
@@ -1631,7 +1701,8 @@
         const barEl = document.getElementById('live-user-bar');
         if (!activeUsersEl || !barEl) return;
 
-        let currentValue = getStoredLiveActiveUser();
+        let currentProfile = getLiveActiveProfile(getKoreaTimeParts().totalMinutes);
+        let currentValue = getStoredLiveActiveSnapshot(currentProfile).value;
 
         const render = () => {
           activeUsersEl.textContent = formatPeople(currentValue);
@@ -1644,11 +1715,8 @@
         const scheduleNextTick = () => {
           const nextDelay = Math.floor(Math.random() * 2701) + 300;
           window.setTimeout(() => {
-            const magnitude = Math.floor(Math.random() * 4) + 1;
-            const direction = Math.random() > 0.5 ? 1 : -1;
-            const change = magnitude * direction;
-
-            currentValue = Math.max(45, Math.min(60, currentValue + change));
+            currentProfile = getLiveActiveProfile(getKoreaTimeParts().totalMinutes);
+            currentValue = getNextLiveActiveValue(currentValue, currentProfile);
             storeLiveActiveUser(currentValue);
             render();
             scheduleNextTick();
