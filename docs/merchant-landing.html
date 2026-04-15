@@ -529,6 +529,43 @@
         color: var(--muted);
       }
 
+      .success-meta {
+        margin-top: 18px;
+        display: grid;
+        gap: 10px;
+        text-align: left;
+      }
+
+      .success-meta-card {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--surface);
+        padding: 14px;
+      }
+
+      .success-meta-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        margin-bottom: 6px;
+      }
+
+      .success-meta-value {
+        font-size: 15px;
+        line-height: 1.7;
+        color: var(--deep);
+        word-break: break-word;
+        white-space: pre-wrap;
+      }
+
+      .success-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
       @media (max-width: 420px) {
         .wrap {
           padding: 14px 14px 32px;
@@ -581,6 +618,7 @@
         .check-item,
         .price-box,
         .choice-option,
+        .success-meta-card,
         .notice,
         .contract-box {
           border-radius: 18px;
@@ -860,6 +898,21 @@
           <div class="success-icon">✓</div>
           <h2>신청이 완료됐습니다</h2>
           <p id="success-message">입력하신 번호로 계약 내용을 보내드릴게요.<br />담당자가 확인 후 빠르게 연락드립니다.</p>
+          <div class="success-meta">
+            <div class="success-meta-card">
+              <span class="success-meta-label">보낼 번호</span>
+              <div class="success-meta-value" id="success-phone">-</div>
+            </div>
+            <div class="success-meta-card">
+              <span class="success-meta-label">문자 내용</span>
+              <div class="success-meta-value" id="success-sms-preview">-</div>
+            </div>
+          </div>
+          <div class="success-actions">
+            <button class="btn btn-primary" type="button" onclick="retrySmsSend()">문자 앱 다시 열기</button>
+            <button class="btn-secondary" type="button" onclick="copySuccessPhone()">번호 복사</button>
+            <button class="btn-secondary" type="button" onclick="copySuccessSms()">문자 내용 복사</button>
+          </div>
         </div>
       </section>
     </main>
@@ -877,6 +930,8 @@
       const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       let currentSlide = 1;
+      let lastSmsPhone = '';
+      let lastSmsMessage = '';
 
       function updateProgress() {
         const pill = document.getElementById('progress-pill');
@@ -1127,6 +1182,45 @@
         window.location.href = buildSmsUrl(phone, message);
       }
 
+      async function copyText(value, successMessage) {
+        if (!value) return;
+        try {
+          await navigator.clipboard.writeText(value);
+          alert(successMessage);
+        } catch (error) {
+          console.error(error);
+          alert('복사에 실패했습니다. 길게 눌러 직접 복사해주세요.');
+        }
+      }
+
+      function updateSuccessActions(phone, message) {
+        lastSmsPhone = phone;
+        lastSmsMessage = message;
+
+        const phoneEl = document.getElementById('success-phone');
+        if (phoneEl) {
+          phoneEl.textContent = formatPhoneDisplay(phone);
+        }
+
+        const messageEl = document.getElementById('success-sms-preview');
+        if (messageEl) {
+          messageEl.textContent = message;
+        }
+      }
+
+      function retrySmsSend() {
+        if (!lastSmsPhone || !lastSmsMessage) return;
+        openSmsComposer(lastSmsPhone, lastSmsMessage);
+      }
+
+      function copySuccessPhone() {
+        copyText(lastSmsPhone, '번호를 복사했어요.');
+      }
+
+      function copySuccessSms() {
+        copyText(lastSmsMessage, '문자 내용을 복사했어요.');
+      }
+
       async function insertSalesLead(payload, legacyMemo) {
         const extendedPayload = {
           owner_name: payload.owner_name,
@@ -1262,7 +1356,8 @@
         document.getElementById('success-view').style.display = 'flex';
 
         const successMessage = document.getElementById('success-message');
-        successMessage.innerHTML = '신청 정보는 정상 접수됐어요.<br />문자 앱이 열리면 계약 내용을 확인하고 전송해주세요.';
+        successMessage.innerHTML = '신청 정보는 정상 접수됐어요.<br />문자 앱이 열리지 않으면 아래 번호와 내용을 복사해 직접 전송해주세요.';
+        updateSuccessActions(formData.phone, contractSummary);
         setTimeout(() => {
           openSmsComposer(formData.phone, contractSummary);
         }, 150);
