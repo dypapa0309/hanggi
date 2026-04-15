@@ -219,6 +219,34 @@
         letter-spacing: -0.03em;
       }
 
+      .hero-growth-headline {
+        margin-top: 14px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .hero-growth-label {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.01em;
+      }
+
+      .hero-growth-number {
+        font-size: 48px;
+        font-weight: 900;
+        line-height: 0.95;
+        color: #ff7a00;
+        letter-spacing: -0.05em;
+      }
+
+      .hero-growth-subheadline {
+        font-size: 26px;
+        font-weight: 900;
+        line-height: 1.2;
+        color: var(--deep);
+      }
+
       .hero-growth h3 {
         margin-top: 12px;
         font-size: 22px;
@@ -888,6 +916,19 @@
           font-size: 26px;
         }
 
+        .hero-growth-headline {
+          margin-top: 12px;
+          gap: 4px;
+        }
+
+        .hero-growth-number {
+          font-size: 40px;
+        }
+
+        .hero-growth-subheadline {
+          font-size: 22px;
+        }
+
         .hero-chart {
           gap: 8px;
         }
@@ -954,7 +995,11 @@
               </div>
               <span class="hero-growth-kicker">2026년 4월 15일 기준 최근 3주</span>
             </div>
-            <h3>이번 주 사용자는 <strong>1,043명</strong>까지 올라왔어요.</h3>
+            <div class="hero-growth-headline">
+              <div class="hero-growth-label">한끼비서 이번 주 사용자</div>
+              <div class="hero-growth-number">1,043명</div>
+              <div class="hero-growth-subheadline">까지 올라왔어요</div>
+            </div>
             <p class="hero-growth-copy">초기 유입이 빠르게 커지는 구간이라, 먼저 등록한 매장이 노출 기회를 선점하기 좋은 타이밍입니다.</p>
             <div class="hero-chart" aria-label="최근 3주 앱 사용자 수 그래프">
               <div class="hero-bar">
