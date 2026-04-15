@@ -174,6 +174,13 @@
         gap: 12px;
       }
 
+      .hero-growth-live {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
       .hero-growth-badge {
         display: inline-flex;
         align-items: center;
@@ -204,6 +211,14 @@
         letter-spacing: 0.04em;
       }
 
+      .hero-growth-live-value {
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 1;
+        color: #ff7a00;
+        letter-spacing: -0.03em;
+      }
+
       .hero-growth h3 {
         margin-top: 12px;
         font-size: 22px;
@@ -218,42 +233,6 @@
         font-size: 14px;
         line-height: 1.7;
         color: var(--muted);
-      }
-
-      .hero-live-users {
-        margin-top: 14px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 14px;
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.84);
-        border: 1px solid rgba(76, 62, 49, 0.08);
-      }
-
-      .hero-live-users-copy {
-        display: grid;
-        gap: 2px;
-      }
-
-      .hero-live-users-label {
-        font-size: 11px;
-        font-weight: 800;
-        color: var(--muted);
-        letter-spacing: 0.04em;
-      }
-
-      .hero-live-users-value {
-        font-size: 22px;
-        font-weight: 900;
-        color: #ff7a00;
-        line-height: 1;
-      }
-
-      .hero-live-users-meta {
-        font-size: 12px;
-        color: var(--muted);
-        line-height: 1.5;
       }
 
       .hero-chart {
@@ -895,19 +874,18 @@
           gap: 8px;
         }
 
+        .hero-growth-live {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 6px;
+        }
+
         .hero-growth h3 {
           font-size: 20px;
         }
 
-        .hero-live-users {
-          width: 100%;
-          align-items: flex-start;
-          justify-content: space-between;
-          gap: 12px;
-        }
-
-        .hero-live-users-value {
-          font-size: 20px;
+        .hero-growth-live-value {
+          font-size: 26px;
         }
 
         .hero-chart {
@@ -970,18 +948,14 @@
           <p class="lead">사장님이 등록을 고민하시는 지금, 실제 사용자 수가 가파르게 오르는 흐름을 먼저 보여드릴게요.</p>
           <div class="hero-growth">
             <div class="hero-growth-top">
-              <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
+              <div class="hero-growth-live">
+                <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
+                <span class="hero-growth-live-value" id="live-active-users">52명</span>
+              </div>
               <span class="hero-growth-kicker">2026년 4월 15일 기준 최근 3주</span>
             </div>
             <h3>이번 주 사용자는 <strong>1,043명</strong>까지 올라왔어요.</h3>
             <p class="hero-growth-copy">초기 유입이 빠르게 커지는 구간이라, 먼저 등록한 매장이 노출 기회를 선점하기 좋은 타이밍입니다.</p>
-            <div class="hero-live-users" aria-label="현재 활성 사용자 수">
-              <div class="hero-live-users-copy">
-                <span class="hero-live-users-label">CURRENT ACTIVE USERS</span>
-                <div class="hero-live-users-value" id="live-active-users">52명</div>
-              </div>
-              <div class="hero-live-users-meta">실시간 접속 기준<br />같은 브라우저에서 유지돼요</div>
-            </div>
             <div class="hero-chart" aria-label="최근 3주 앱 사용자 수 그래프">
               <div class="hero-bar">
                 <div class="hero-bar-track">
