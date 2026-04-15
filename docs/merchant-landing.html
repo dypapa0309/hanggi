@@ -213,16 +213,47 @@
         color: #ff7a00;
       }
 
-      .hero-growth h3 strong.is-live {
-        display: inline-block;
-        animation: liveNumberBlink 1.8s ease-in-out infinite;
-      }
-
       .hero-growth-copy {
         margin-top: 8px;
         font-size: 14px;
         line-height: 1.7;
         color: var(--muted);
+      }
+
+      .hero-live-users {
+        margin-top: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(76, 62, 49, 0.08);
+      }
+
+      .hero-live-users-copy {
+        display: grid;
+        gap: 2px;
+      }
+
+      .hero-live-users-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+
+      .hero-live-users-value {
+        font-size: 22px;
+        font-weight: 900;
+        color: #ff7a00;
+        line-height: 1;
+      }
+
+      .hero-live-users-meta {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
       }
 
       .hero-chart {
@@ -275,7 +306,6 @@
       .hero-bar-fill.is-current {
         background: linear-gradient(180deg, #ff9d3b 0%, #ff6b00 100%);
         box-shadow: 0 14px 24px rgba(255, 107, 0, 0.28);
-        animation: currentBarGlow 1.8s ease-in-out infinite;
       }
 
       .hero-bar-meta {
@@ -324,16 +354,6 @@
         50% {
           filter: saturate(1.08);
           box-shadow: 0 16px 30px rgba(255, 107, 0, 0.34);
-        }
-      }
-
-      @keyframes liveNumberBlink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.72;
         }
       }
 
@@ -879,6 +899,17 @@
           font-size: 20px;
         }
 
+        .hero-live-users {
+          width: 100%;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+        }
+
+        .hero-live-users-value {
+          font-size: 20px;
+        }
+
         .hero-chart {
           gap: 8px;
         }
@@ -942,8 +973,15 @@
               <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
               <span class="hero-growth-kicker">2026년 4월 15일 기준 최근 3주</span>
             </div>
-            <h3>이번 주 사용자는 <strong class="is-live" id="live-user-count">1,043명</strong>까지 올라왔어요.</h3>
+            <h3>이번 주 사용자는 <strong>1,043명</strong>까지 올라왔어요.</h3>
             <p class="hero-growth-copy">초기 유입이 빠르게 커지는 구간이라, 먼저 등록한 매장이 노출 기회를 선점하기 좋은 타이밍입니다.</p>
+            <div class="hero-live-users" aria-label="현재 활성 사용자 수">
+              <div class="hero-live-users-copy">
+                <span class="hero-live-users-label">CURRENT ACTIVE USERS</span>
+                <div class="hero-live-users-value" id="live-active-users">52명</div>
+              </div>
+              <div class="hero-live-users-meta">실시간 접속 기준<br />같은 브라우저에서 유지돼요</div>
+            </div>
             <div class="hero-chart" aria-label="최근 3주 앱 사용자 수 그래프">
               <div class="hero-bar">
                 <div class="hero-bar-track">
@@ -966,12 +1004,12 @@
               </div>
               <div class="hero-bar">
                 <div class="hero-bar-track">
-                  <div class="hero-bar-fill is-current" id="live-user-bar" data-base-value="1043" data-max-value="1064" style="height: 100%;">1,043명</div>
+                  <div class="hero-bar-fill is-current" id="live-user-bar" style="height: 100%;">1,043명</div>
                 </div>
                 <div class="hero-bar-meta">
                   <span class="hero-bar-label">4월 13일 주</span>
                   <span class="hero-bar-date">2026-04-13</span>
-                  <span class="hero-bar-delta" id="live-user-delta">+701명</span>
+                  <span class="hero-bar-delta">+701명</span>
                 </div>
               </div>
             </div>
@@ -1268,6 +1306,9 @@
       const { createClient } = supabase;
       const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+      const LIVE_ACTIVE_USER_STORAGE_KEY = 'hanggi_live_active_users_v1';
+      const LIVE_ACTIVE_USER_TS_KEY = 'hanggi_live_active_users_updated_at_v1';
+
       let currentSlide = 1;
       let lastSmsPhone = '';
       let lastSmsMessage = '';
@@ -1547,39 +1588,47 @@
         updateContractSummaryUI(contractTerm, pricing);
       }
 
-      function initLiveUserTrend() {
-        const countEl = document.getElementById('live-user-count');
-        const barEl = document.getElementById('live-user-bar');
-        const deltaEl = document.getElementById('live-user-delta');
-        if (!countEl || !barEl || !deltaEl) return;
+      function getStoredLiveActiveUser() {
+        try {
+          const storedValue = window.localStorage.getItem(LIVE_ACTIVE_USER_STORAGE_KEY);
+          const parsed = Number(storedValue);
+          if (!Number.isFinite(parsed)) return 52;
+          return Math.max(45, Math.min(60, Math.round(parsed)));
+        } catch (error) {
+          return 52;
+        }
+      }
 
-        const baseValue = Number(barEl.dataset.baseValue || 1043);
-        const maxValue = Number(barEl.dataset.maxValue || 1064);
-        const previousWeek = 342;
-        let currentValue = baseValue;
-        let direction = 1;
+      function storeLiveActiveUser(value) {
+        try {
+          window.localStorage.setItem(LIVE_ACTIVE_USER_STORAGE_KEY, String(value));
+          window.localStorage.setItem(LIVE_ACTIVE_USER_TS_KEY, String(Date.now()));
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      function initLiveUserTrend() {
+        const activeUsersEl = document.getElementById('live-active-users');
+        const barEl = document.getElementById('live-user-bar');
+        if (!activeUsersEl || !barEl) return;
+
+        let currentValue = getStoredLiveActiveUser();
 
         const render = () => {
-          countEl.textContent = formatPeople(currentValue);
-          barEl.textContent = formatPeople(currentValue);
-          const percent = Math.max(12, Math.min(100, (currentValue / maxValue) * 100));
-          barEl.style.height = `${percent}%`;
-          deltaEl.textContent = `+${(currentValue - previousWeek).toLocaleString('ko-KR')}명`;
+          activeUsersEl.textContent = formatPeople(currentValue);
+          barEl.textContent = '1,043명';
+          barEl.style.height = '100%';
         };
 
         render();
 
         window.setInterval(() => {
-          currentValue += direction;
-          if (currentValue >= maxValue) {
-            currentValue = maxValue;
-            direction = -1;
-          } else if (currentValue <= baseValue) {
-            currentValue = baseValue;
-            direction = 1;
-          }
+          const change = Math.random() > 0.5 ? 1 : -1;
+          currentValue = Math.max(45, Math.min(60, currentValue + change));
+          storeLiveActiveUser(currentValue);
           render();
-        }, 1400);
+        }, 3200);
       }
 
       function addExtraMenu(value = '') {
