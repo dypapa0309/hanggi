@@ -194,6 +194,7 @@
         border-radius: 50%;
         background: #ff7a00;
         box-shadow: 0 0 0 6px rgba(255, 122, 0, 0.12);
+        animation: livePulse 1.4s ease-in-out infinite;
       }
 
       .hero-growth-kicker {
@@ -210,6 +211,11 @@
 
       .hero-growth h3 strong {
         color: #ff7a00;
+      }
+
+      .hero-growth h3 strong.is-live {
+        display: inline-block;
+        animation: liveNumberBlink 1.8s ease-in-out infinite;
       }
 
       .hero-growth-copy {
@@ -269,6 +275,7 @@
       .hero-bar-fill.is-current {
         background: linear-gradient(180deg, #ff9d3b 0%, #ff6b00 100%);
         box-shadow: 0 14px 24px rgba(255, 107, 0, 0.28);
+        animation: currentBarGlow 1.8s ease-in-out infinite;
       }
 
       .hero-bar-meta {
@@ -292,6 +299,42 @@
         font-size: 11px;
         font-weight: 800;
         color: #ff7a00;
+      }
+
+      @keyframes livePulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+          box-shadow: 0 0 0 6px rgba(255, 122, 0, 0.12);
+        }
+        50% {
+          transform: scale(1.18);
+          opacity: 0.72;
+          box-shadow: 0 0 0 10px rgba(255, 122, 0, 0.08);
+        }
+      }
+
+      @keyframes currentBarGlow {
+        0%,
+        100% {
+          filter: saturate(1);
+          box-shadow: 0 14px 24px rgba(255, 107, 0, 0.24);
+        }
+        50% {
+          filter: saturate(1.08);
+          box-shadow: 0 16px 30px rgba(255, 107, 0, 0.34);
+        }
+      }
+
+      @keyframes liveNumberBlink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.72;
+        }
       }
 
       .section-block {
@@ -899,7 +942,7 @@
               <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
               <span class="hero-growth-kicker">2026년 4월 15일 기준 최근 3주</span>
             </div>
-            <h3>이번 주 사용자는 <strong>1,043명</strong>까지 올라왔어요.</h3>
+            <h3>이번 주 사용자는 <strong class="is-live" id="live-user-count">1,043명</strong>까지 올라왔어요.</h3>
             <p class="hero-growth-copy">초기 유입이 빠르게 커지는 구간이라, 먼저 등록한 매장이 노출 기회를 선점하기 좋은 타이밍입니다.</p>
             <div class="hero-chart" aria-label="최근 3주 앱 사용자 수 그래프">
               <div class="hero-bar">
@@ -923,12 +966,12 @@
               </div>
               <div class="hero-bar">
                 <div class="hero-bar-track">
-                  <div class="hero-bar-fill is-current" style="height: 100%;">1,043명</div>
+                  <div class="hero-bar-fill is-current" id="live-user-bar" data-base-value="1043" data-max-value="1064" style="height: 100%;">1,043명</div>
                 </div>
                 <div class="hero-bar-meta">
                   <span class="hero-bar-label">4월 13일 주</span>
                   <span class="hero-bar-date">2026-04-13</span>
-                  <span class="hero-bar-delta">+701명</span>
+                  <span class="hero-bar-delta" id="live-user-delta">+701명</span>
                 </div>
               </div>
             </div>
@@ -1286,6 +1329,10 @@
         return `${Math.round(value).toLocaleString('ko-KR')}원`;
       }
 
+      function formatPeople(value) {
+        return `${Math.round(value).toLocaleString('ko-KR')}명`;
+      }
+
       function getEnteredMenuCount() {
         const mainMenu = document.getElementById('main_menu')?.value.trim() ?? '';
         return (mainMenu ? 1 : 0) + getExtraMenus().length;
@@ -1498,6 +1545,41 @@
         }
 
         updateContractSummaryUI(contractTerm, pricing);
+      }
+
+      function initLiveUserTrend() {
+        const countEl = document.getElementById('live-user-count');
+        const barEl = document.getElementById('live-user-bar');
+        const deltaEl = document.getElementById('live-user-delta');
+        if (!countEl || !barEl || !deltaEl) return;
+
+        const baseValue = Number(barEl.dataset.baseValue || 1043);
+        const maxValue = Number(barEl.dataset.maxValue || 1064);
+        const previousWeek = 342;
+        let currentValue = baseValue;
+        let direction = 1;
+
+        const render = () => {
+          countEl.textContent = formatPeople(currentValue);
+          barEl.textContent = formatPeople(currentValue);
+          const percent = Math.max(12, Math.min(100, (currentValue / maxValue) * 100));
+          barEl.style.height = `${percent}%`;
+          deltaEl.textContent = `+${(currentValue - previousWeek).toLocaleString('ko-KR')}명`;
+        };
+
+        render();
+
+        window.setInterval(() => {
+          currentValue += direction;
+          if (currentValue >= maxValue) {
+            currentValue = maxValue;
+            direction = -1;
+          } else if (currentValue <= baseValue) {
+            currentValue = baseValue;
+            direction = 1;
+          }
+          render();
+        }, 1400);
       }
 
       function addExtraMenu(value = '') {
@@ -1805,6 +1887,7 @@
       updatePricingUI();
       initSalesOwnerPrefill();
       initContractViewMode();
+      initLiveUserTrend();
     </script>
   </body>
 </html>
