@@ -887,13 +887,13 @@
     <main class="wrap">
       <div class="topbar">
         <div class="brand-title">사장님 가입 안내</div>
-        <div class="progress-pill" id="progress-pill">1 / 6</div>
+        <div class="progress-pill" id="progress-pill">1 / 7</div>
       </div>
 
       <section class="slide active" data-slide="1">
         <div class="card hero-card">
-          <h1>사장님 매장이 고객의<br />"오늘 뭐 먹지?" 순간에 들어갑니다.</h1>
-          <p class="lead">현장에서는 실제 앱 화면으로 흐름을 보여드리고, 이 페이지에서는 핵심 혜택과 가입 절차만 빠르게 안내해드릴게요.</p>
+          <h1>한끼비서 사용자가<br />이번 주 크게 늘고 있어요.</h1>
+          <p class="lead">사장님이 등록을 고민하시는 지금, 실제 사용자 수가 가파르게 오르는 흐름을 먼저 보여드릴게요.</p>
           <div class="hero-growth">
             <div class="hero-growth-top">
               <span class="hero-growth-badge">실시간 앱 사용자 추이</span>
@@ -933,6 +933,16 @@
               </div>
             </div>
           </div>
+          <div class="nav">
+            <button class="btn btn-primary" type="button" onclick="goToSlide(2)">다음</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="2">
+        <div class="card hero-card">
+          <h1>사장님 매장이 고객의<br />"오늘 뭐 먹지?" 순간에 들어갑니다.</h1>
+          <p class="lead">현장에서는 실제 앱 화면으로 흐름을 보여드리고, 이 페이지에서는 핵심 혜택과 가입 절차만 빠르게 안내해드릴게요.</p>
           <div class="summary-grid">
             <div class="summary-card">
               <strong>메뉴를 찾는 순간 연결</strong>
@@ -948,12 +958,13 @@
             </div>
           </div>
           <div class="nav">
-            <button class="btn btn-primary" type="button" onclick="goToSlide(2)">다음</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(1)">이전</button>
+            <button class="btn btn-primary" type="button" onclick="goToSlide(3)">다음</button>
           </div>
         </div>
       </section>
 
-      <section class="slide" data-slide="2">
+      <section class="slide" data-slide="3">
         <div class="card">
           <h2>한끼비서는 메뉴를 찾는 흐름 안에서 매장을 보여드려요.</h2>
           <p class="lead">광고를 따로 세팅해서 노출을 사는 방식보다, 고객이 실제로 식사를 고민하는 순간에 자연스럽게 연결되는 흐름에 집중합니다.</p>
@@ -972,13 +983,13 @@
             </div>
           </div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(1)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="goToSlide(3)">다음</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(2)">이전</button>
+            <button class="btn btn-primary" type="button" onclick="goToSlide(4)">다음</button>
           </div>
         </div>
       </section>
 
-      <section class="slide" data-slide="3">
+      <section class="slide" data-slide="4">
         <div class="card">
           <h2>기존 홍보비보다 부담 낮게, 가볍게 시작할 수 있어요.</h2>
           <p class="lead">배달앱 광고만이 아니라 플레이스, 블로그, 체험단처럼 사장님이 익숙하게 쓰는 홍보비와 비교했을 때도 시작 부담을 낮춘 구조예요.</p>
@@ -1001,13 +1012,13 @@
             </div>
           </div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(2)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="goToSlide(4)">다음</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(3)">이전</button>
+            <button class="btn btn-primary" type="button" onclick="goToSlide(5)">다음</button>
           </div>
         </div>
       </section>
 
-      <section class="slide" data-slide="4">
+      <section class="slide" data-slide="5">
         <div class="card">
           <h2>현재 가격 정책으로 먼저 부담 없이 시작해보세요.</h2>
           <div class="price-card">
@@ -1064,13 +1075,13 @@
             </div>
           </div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(3)">이전</button>
-            <button class="btn btn-primary" type="button" onclick="goToSlide(5)">다음</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(4)">이전</button>
+            <button class="btn btn-primary" type="button" onclick="goToSlide(6)">다음</button>
           </div>
         </div>
       </section>
 
-      <section class="slide" data-slide="5">
+      <section class="slide" data-slide="6">
         <div class="card">
           <h2>매장 정보와 대표 메뉴를 알려주세요.</h2>
           <p class="lead">여기까지 입력해주시면 운영팀이 등록 검토와 연락을 빠르게 이어갈 수 있어요.</p>
@@ -1112,13 +1123,13 @@
           </div>
           <div id="error-details" class="error-msg"></div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(4)">이전</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(5)">이전</button>
             <button class="btn btn-primary" type="button" onclick="validateStoreDetails()">다음</button>
           </div>
         </div>
       </section>
 
-      <section class="slide" data-slide="6" id="contract-view">
+      <section class="slide" data-slide="7" id="contract-view">
         <div class="card">
           <h2>계약 내용을 확인하고 전송해주세요.</h2>
           <p class="lead">실제 제출 전에 아래 계약 내용과 요금을 확인한 뒤 동의 여부를 선택해주세요.</p>
@@ -1172,7 +1183,7 @@
           </div>
           <div id="error-submit" class="error-msg"></div>
           <div class="nav">
-            <button class="btn-secondary" type="button" onclick="goToSlide(5)">이전</button>
+            <button class="btn-secondary" type="button" onclick="goToSlide(6)">이전</button>
             <button class="btn btn-primary" id="submit-btn" type="button" onclick="handleSubmit()">전송하기</button>
           </div>
         </div>
@@ -1206,7 +1217,7 @@
       const SUPABASE_URL = 'https://bfdesyathuzrbagemhoe.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmZGVzeWF0aHV6cmJhZ2VtaG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDQ4MDEsImV4cCI6MjA5MTIyMDgwMX0.DUY-bvmCT-jRwLlRO2aCXeV3uDjG7-bCiCHRCfUmd3Q';
       const CONTRACT_VERSION = '2026-04-09-v1';
-      const TOTAL_SLIDES = 6;
+      const TOTAL_SLIDES = 7;
       const BASE_MENU_PRICE = 4900;
       const YEARLY_DISCOUNT_RATE = 0.05;
       const TWO_YEAR_DISCOUNT_RATE = 0.1;
@@ -1536,7 +1547,7 @@
         }
 
         document.getElementById('phone').value = formatPhoneDisplay(phone);
-        goToSlide(6);
+        goToSlide(7);
       }
 
       function buildContractSummary(formData) {
@@ -1770,7 +1781,7 @@
         document.querySelectorAll('.slide').forEach((slide) => {
           slide.classList.remove('active');
         });
-        goToSlide(6);
+        goToSlide(7);
       }
 
       function initSalesOwnerPrefill() {
